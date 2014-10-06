@@ -1,4 +1,4 @@
-package cap01;
+package ud.prog3.cap01;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

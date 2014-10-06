@@ -1,4 +1,4 @@
-package cap01;
+package ud.prog3.cap01;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

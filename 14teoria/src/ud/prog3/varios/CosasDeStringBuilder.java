@@ -1,4 +1,4 @@
-package varios;
+package ud.prog3.varios;
 
 // La clase String tiene objetos "inmutables". Eso quiere decir que no cambian nunca su valor. Se crean nuevos.
 // Para algunas cosas se usa en su lugar la clase StringBuilder, que permite objetos "mutables", strings que sí pueden cambiar.

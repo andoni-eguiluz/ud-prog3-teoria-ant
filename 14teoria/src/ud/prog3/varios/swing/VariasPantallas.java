@@ -1,4 +1,4 @@
-package varios.swing;
+package ud.prog3.varios.swing;
 
 import java.awt.GraphicsConfiguration;
 import java.awt.GraphicsDevice;

@@ -1,4 +1,4 @@
-package varios;
+package ud.prog3.varios;
 
 import java.io.*;
 import java.util.*;

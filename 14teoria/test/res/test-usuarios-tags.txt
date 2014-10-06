@@ -1,0 +1,40 @@
+[USUARIO]
+[nick] buzz
+[password] #9abbf
+[nombre] Buzz
+[apellidos] Lightyear
+[telefono] 101202303
+[fechaUltimoLogin] 0
+[tipo] Admin
+[emails] buzz@gmail.com,amigo.de.woody@gmail.com
+[FINUSUARIO]
+[USUARIO]
+[nick] woody
+[password] woody
+[nombre] Woody
+[apellidos] The cowboy
+[telefono] 666111222
+[fechaUltimoLogin] 0
+[tipo] Cliente
+[emails] woody-toystory@gmail.com
+[FINUSUARIO]
+[USUARIO]
+[nick] pcruz
+[password] 4556gght
+[nombre] Penélope
+[apellidos] Cruz
+[telefono] 609634852
+[fechaUltimoLogin] 0
+[tipo] Invitado
+[emails] penelope.cruz@gmail.com
+[FINUSUARIO]
+[USUARIO]
+[nick] jbardem
+[password] bardemthebest
+[nombre] Javier
+[apellidos] Bardem
+[telefono] 607349552
+[fechaUltimoLogin] 0
+[tipo] Invitado
+[emails] javier.bardem@gmail.com
+[FINUSUARIO]

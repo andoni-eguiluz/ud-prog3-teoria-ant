@@ -133,7 +133,7 @@ public class MonitorizaDisco {
     public static void main(String[] args) {
         // Poner directorio a mano (comentar para cogerlo de la línea de comandos)
     	// args = new String[] { "-r", "d:\\\\t" };
-    	args = new String[] { "d:\\t\\tempo22" };
+    	args = new String[] { "D:/t/temp" };
         if (args.length == 0 || args.length > 2) muestraUso();
         boolean recursivo = false;
         int paramCarpeta = 0;

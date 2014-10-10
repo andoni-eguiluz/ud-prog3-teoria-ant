@@ -1,6 +1,6 @@
 [USUARIO]
 [nick] buzz
-[password] #9abbf
+[password] #9ab,bf
 [nombre] Buzz
 [apellidos] Lightyear
 [telefono] 101202303

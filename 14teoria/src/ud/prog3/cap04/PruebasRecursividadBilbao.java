@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
-public class TestRecursividad {
+public class PruebasRecursividadBilbao {
 
 	private static int numLls = 0;
 	public static void f( int i ) {

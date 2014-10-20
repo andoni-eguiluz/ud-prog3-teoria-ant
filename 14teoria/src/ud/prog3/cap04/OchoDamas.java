@@ -52,13 +52,38 @@ public class OchoDamas extends JFrame {
 	}
 	
 	public boolean hayOtraDamaEn( JLabel[][] tablero, int fila, int col ) {
-		for (int f = 0; f<8; f++)
-			for (int c = 0; c<8; c++)
-				if ((fila!=f || col!=c) && tablero[f][c].getText().equals("D")) {
-					System.out.print( "Dama en " + fila + "," + col );
-					System.out.println( " amenaza a otra dama en " + f + "," + c );
-					return true;
-				}
+		for (int f = 0; f<8; f++) // Comprueba toda la columna
+			if (fila!=f && tablero[f][col].getText().equals("D")) {
+				System.out.print( "Dama en " + fila + "," + col );
+				System.out.println( " amenaza a otra dama en " + f + "," + col );
+				return true;
+			}
+		for (int c = 0; c<8; c++) // Comprueba toda la fila
+			if ((col!=c) && tablero[fila][c].getText().equals("D")) {
+				System.out.print( "Dama en " + fila + "," + col );
+				System.out.println( " amenaza a otra dama en " + fila + "," + c );
+				return true;
+			}
+		for (int inc = -7; inc<8; inc++) { // Comprueba toda la diagonal 1
+			int filaD = fila-inc;  // Fila/columna en diagonal
+			int colD = col-inc;
+			if ((fila!=filaD) && (filaD>=0 && filaD<8 && colD>=0 && colD<8)
+					&& tablero[filaD][colD].getText().equals("D")) {
+				System.out.print( "Dama en " + fila + "," + col );
+				System.out.println( " amenaza a otra dama en " + filaD + "," + colD );
+				return true;
+			}
+		}
+		for (int inc = -7; inc<8; inc++) { // Comprueba toda la diagonal 1
+			int filaD = fila-inc;  // Fila/columna en diagonal 2
+			int colD = col+inc;
+			if ((fila!=filaD) && (filaD>=0 && filaD<8 && colD>=0 && colD<8)
+					&& tablero[filaD][colD].getText().equals("D")) {
+				System.out.print( "Dama en " + fila + "," + col );
+				System.out.println( " amenaza a otra dama en " + filaD + "," + colD );
+				return true;
+			}
+		}
 		return false;
 	}
 	

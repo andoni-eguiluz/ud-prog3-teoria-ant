@@ -29,15 +29,16 @@ public class OchoDamas extends JFrame {
 	public static void main(String[] args) {
 		OchoDamas v = new OchoDamas();
 		v.setVisible( true );
-		v.resolverTableroDesdeFila( v.tablero, 0 );
+		System.out.println( "Resuelto? " + v.resolverTableroDesdeFila( v.tablero, 0 ) );
 	}
 
-	public void resolverTableroDesdeFila( JLabel[][] tablero, int fila ) {
+	public boolean resolverTableroDesdeFila( JLabel[][] tablero, int fila ) {
 		try { Thread.sleep(100); } catch (Exception e) {}
 		// TODO Aquí cambiar y hacer:
 		tablero[0][0].setText( "D" );
 		tablero[1][0].setText( "D" );
 		lMensaje.setText( "Es correcto? " + esPosicionCorrecta(tablero) );
+		return esPosicionCorrecta(tablero);
 	}
 	
 	public boolean esPosicionCorrecta( JLabel[][] tablero ) {

@@ -26,6 +26,7 @@ public class PruebasRecursividadBilbao {
 	}
 	
 	public static int factorial(int i) {
+		System.out.println( "Entrando en factorial de " + i );
 		if (i==0) 
 			return 1;
 		else 
@@ -56,12 +57,29 @@ public class PruebasRecursividadBilbao {
 			e.printStackTrace();
 		}
 	} 
+
+	static int busquedaBinaria( int[] array, int val, int desde, int hasta ) {
+		if (desde==hasta) {
+			if (array[desde]==val)
+				return desde; // Segundo caso base
+			else
+				return -1; // Primer caso base
+		} else {
+			int mitad = (desde + hasta) / 2;
+			if (val <= array[mitad]) {
+				return busquedaBinaria(array, val, desde, mitad);
+			} else {
+				return busquedaBinaria(array, val, mitad+1, hasta);
+			}
+		}
+	}
 	
 	
 	public static void main(String[] args) {
+		/*
 		// Ejemplo 1
-//		int i = 5000;
-//		f(i);
+		int i = 5000;
+		f(i);
 		//
 		// Ejemplo 2: producto
 		int op1 = 5;
@@ -87,6 +105,13 @@ public class PruebasRecursividadBilbao {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		*/
+		
+		System.out.println( factorial(7) );
+
+		// Test de búsqueda binaria en array de enteros
+		int[] v = { 1, 10, 15, 25, 30, 43, 58, 72, 110 };
+		System.out.println( busquedaBinaria(v, 72, 0, v.length-1) );
 		
 	}
 	

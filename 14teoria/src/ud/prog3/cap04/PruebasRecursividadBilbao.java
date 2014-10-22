@@ -29,8 +29,11 @@ public class PruebasRecursividadBilbao {
 		System.out.println( "Entrando en factorial de " + i );
 		if (i==0) 
 			return 1;
-		else 
-			return i * factorial(i-1);
+		else {
+			int j = factorial(i-1);
+			System.out.println( "Devolviendo fact de " + i + " con valor " + j);
+			return i * j;
+		}
 	}
 	
 	private static void sacaLista( ArrayList<String> al, 
@@ -58,7 +61,16 @@ public class PruebasRecursividadBilbao {
 		}
 	} 
 
+	
+	/** Busca un valor en un array
+	 * @param array
+	 * @param val
+	 * @param desde	índice del primer elemento
+	 * @param hasta	índice del último elemento (INCLUSIVE)
+	 * @return
+	 */
 	static int busquedaBinaria( int[] array, int val, int desde, int hasta ) {
+		System.out.println( "Busco entre " + desde + " y " + hasta);
 		if (desde==hasta) {
 			if (array[desde]==val)
 				return desde; // Segundo caso base
@@ -66,11 +78,17 @@ public class PruebasRecursividadBilbao {
 				return -1; // Primer caso base
 		} else {
 			int mitad = (desde + hasta) / 2;
+			// 1. ANTES
+			// 2. LLAMADA
+			int devuelvo;
 			if (val <= array[mitad]) {
-				return busquedaBinaria(array, val, desde, mitad);
+				devuelvo = busquedaBinaria(array, val, desde, mitad);
 			} else {
-				return busquedaBinaria(array, val, mitad+1, hasta);
+				devuelvo = busquedaBinaria(array, val, mitad+1, hasta);
 			}
+			// 3. DESPUÉS
+			System.out.println( "Entre " + desde + " y " + hasta + " he encontrado " + devuelvo );
+			return devuelvo;
 		}
 	}
 	
@@ -111,7 +129,7 @@ public class PruebasRecursividadBilbao {
 
 		// Test de búsqueda binaria en array de enteros
 		int[] v = { 1, 10, 15, 25, 30, 43, 58, 72, 110 };
-		System.out.println( busquedaBinaria(v, 72, 0, v.length-1) );
+		System.out.println( busquedaBinaria(v, 73, 0, v.length-1) );
 		
 	}
 	

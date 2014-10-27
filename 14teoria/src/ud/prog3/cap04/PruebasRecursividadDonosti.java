@@ -134,7 +134,6 @@ public class PruebasRecursividadDonosti {
 		ls.add( "b" );
 		ls.add( "c" );
 		sacaLista( ls, 0 );
-		*/
 		/*
 		// Test de lectura recursiva de fichero de texto		
   		long tIni = System.currentTimeMillis();

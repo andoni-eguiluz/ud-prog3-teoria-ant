@@ -10,5 +10,6 @@
 	</classpathentry>
 	<classpathentry kind="lib" path="D:/desarrollo/libs/sqlite-jdbc4-3.8.2-SNAPSHOT.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="lib/sizeOf/SizeOf.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

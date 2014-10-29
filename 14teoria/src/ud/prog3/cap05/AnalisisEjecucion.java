@@ -10,12 +10,21 @@ public class AnalisisEjecucion {
 	private static long memLibre = -1;
 	private static long tiempoRecienUsado = -1;
 	private static long ultimoTiempo = -1;
+	private static final long TIEMPO_SLEEP = 100;
 	
 	/** Calcula la memoria de heap aproximada utilizada desde la última vez
 	 * que se llamó a este mismo método.<p>
 	 */
 	private static void calcMemAprox() {
-		for (int i=0; i<10; i++) System.gc();  
+		for (int i=0; i<1; i++) {   // Por si se quisiera repetir la "limpieza" de memoria
+			try {
+				System.gc();
+				Thread.sleep(TIEMPO_SLEEP);
+				System.runFinalization();
+				System.gc();
+				Thread.sleep(TIEMPO_SLEEP);
+			} catch (InterruptedException e) {}
+		}
 			// Llama varias veces al garbage collector para que la JVM se quede lo más limpia posible
 			// No es exacto y depende de la implementación de la JVM. Tampoco es una manera adecuada
 			// de funcionar, salvo para pruebas, como estamos haciendo aquí.

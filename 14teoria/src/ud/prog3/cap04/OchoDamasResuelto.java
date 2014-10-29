@@ -34,10 +34,11 @@ public class OchoDamasResuelto extends JFrame {
 	}
 
 	public boolean resolverTableroDesdeFila( JLabel[][] tablero, int fila ) {
-		try { Thread.sleep(50); } catch (Exception e) {}
+		try { Thread.sleep(10); } catch (Exception e) {}
 		if (fila==8) {
 			lMensaje.setText( "Problema resuelto!" );
-			return true;
+			try { Thread.sleep(1000); } catch (Exception e) {}
+			return false;
 		} else {
 			for (int col=0; col<8; col++) {
 				tablero[fila][col].setText( "D" );

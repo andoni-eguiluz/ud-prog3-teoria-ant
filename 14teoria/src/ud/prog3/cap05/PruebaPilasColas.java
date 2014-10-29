@@ -17,7 +17,7 @@ public class PruebaPilasColas {
 		System.out.println( "Meter y sacar 1, 3, 5 en cola:");
 		cola.addLast( 1 ); cola.addLast( 3 ); cola.addLast( 5 );
 		while (!cola.isEmpty())
-			System.out.print( " " + cola.pop() );
+			System.out.print( " " + cola.removeFirst() );
 		System.out.println();
 		int numEls = 100000;
 		visuTiempo( "Análisis de tiempos:", true );

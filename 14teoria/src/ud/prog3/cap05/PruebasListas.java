@@ -96,35 +96,41 @@ public class PruebasListas {
 		ArrayList<Object> al2 = new ArrayList<>();
 		LinkedList<Object> ll2 = new LinkedList<>();
 		int tamListas = 100000;
-		visuTiempo( "Al inicio", true );
 		visuMem( null, false );
 		if (numPrueba==1 || numPrueba==3) {
+			visuTiempo( null );
 			cargaLista( al, tamListas );
 			visuTiempo( "  Tras cargar ArrayList de " + tamListas );
 			visuMem( "  Y la memoria usada", true );
 		}
 		if (numPrueba==2 || numPrueba==3) {
+			visuTiempo( null );
 			cargaLista( ll, tamListas );
 			visuTiempo( "  Tras cargar LinkedList de " + tamListas );
 			visuMem( "  Y la memoria usada", true );
 		}
 		System.out.println();
+		visuMem( null, false );
 		if (numPrueba==1 || numPrueba==3) {
+			visuTiempo( null );
 			cargaListaInsMedio( al2, tamListas );
 			visuTiempo( "  Tras cargar ArrayList de " + tamListas + " insertando en medio" );
 			visuMem( "  Y la memoria usada", true );
 		}
 		if (numPrueba==2 || numPrueba==3) {
+			visuTiempo( null );
 			cargaListaInsMedio( ll2, tamListas );
 			visuTiempo( "  Tras cargar LinkedList de " + tamListas + " insertando en medio" );
 			visuMem( "  Y la memoria usada", true );
 		}
 		System.out.println();
 		if (numPrueba==1 || numPrueba==3) {
+			visuTiempo( null );
 			recorreLista( al, 1 );
 			visuTiempo( "  Tras recorrer arriba y abajo ArrayList de " + tamListas );
 		}
 		if (numPrueba==2 || numPrueba==3) {
+			visuTiempo( null );
 			recorreLista( ll, 1 );
 			visuTiempo( "  Tras recorrer arriba y abajo LinkedList de " + tamListas );
 		}
@@ -135,10 +141,12 @@ public class PruebasListas {
 		System.out.println();
 		int numVeces = 10000;
 		if (numPrueba==1 || numPrueba==3) {
+			visuTiempo( null );
 			cogePosicionesLista( al, numVeces );
 			visuTiempo( "  Tras coger " + numVeces + " posiciones numéricas sueltas de ArrayList de " + tamListas );
 		}
 		if (numPrueba==2 || numPrueba==3) {
+			visuTiempo( null );
 			cogePosicionesLista( ll, numVeces );
 			visuTiempo( "  Tras coger " + numVeces + " posiciones numéricas sueltas de LinkedList de " + tamListas );
 		}

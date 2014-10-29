@@ -1,10 +1,12 @@
 package ud.prog3.cap05;
 
 public class MiPropiaListaEnlazada {
+	int tam;
 	MiNodo inicio;
 	
 	public MiPropiaListaEnlazada() {
 		inicio = null;
+		tam = 0;
 	}
 	
 	public void insertaPrimero( Object o ) {
@@ -12,6 +14,7 @@ public class MiPropiaListaEnlazada {
 		nuevoNodo.valor = o;
 		nuevoNodo.siguiente = inicio;
 		inicio = nuevoNodo;
+		tam++;
 	}
 	
 	public String toString() {
@@ -21,7 +24,7 @@ public class MiPropiaListaEnlazada {
 			ret += (" " + rec.valor.toString());
 			rec = rec.siguiente;
 		}
-		return ret + " )";
+		return ret + " )    [tam=" + tam + "]";
 	}
 	
 	// Prueba de la lista

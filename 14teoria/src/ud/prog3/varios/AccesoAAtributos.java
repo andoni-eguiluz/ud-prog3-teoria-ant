@@ -37,6 +37,12 @@ public class AccesoAAtributos {
 	private static int numLlamadas = 0;  // Para truncar la recursividad
 	private static HashSet<Object> objetosYaRecorridos = new HashSet<>();
 	private static int tamObjeto = 0;
+	private static String camposAMostrar = "";
+	private static String ret = "";
+	private static String atsInstancia = "";
+	private static String atsStatic = "";
+	private static String atsErr = "";
+	private static boolean hayErr = false;
 	
 	/** Calcula un string para visualización de atributos (y sus valores, y sus tamaños en memoria) del objeto indicado
 	 * @param mens	Mensaje inicial que se muestra en consola en la primera línea
@@ -47,28 +53,47 @@ public class AccesoAAtributos {
 	 * @return	String maquetado con toda la información
 	 */
 	public static String atributosYValoresToString( String mens, String sep, Object o, boolean tbStatic, boolean mostrarTam ) {
+		ret = (mens.equals("")) ? "" : (mens + "\n");
+		atsInstancia = !tbStatic ? "" : "Atributos de instancia:\n";
+		atsStatic = "Atributos de clase (static):\n";
+		atsErr = "Errores de acceso a atributos:\n";
 		numLlamadas = 0;
 		tamObjeto = 0;
+		hayErr = false;
 		// objetosYaRecorridos = new HashSet<>();  // Hecho ya una vez en inicialización
-		String ret = atributosYValoresToStringRec( mens, sep, o, tbStatic, mostrarTam );
+		atributosYValoresToStringRec( mens, sep, o, tbStatic, mostrarTam );
 		objetosYaRecorridos.clear();
+		ret += atsInstancia;
+		if (tbStatic) ret += atsStatic;
+		if (hayErr) ret += atsErr;
 		if (mostrarTam) {
 			ret += "{" + tamObjeto + "}\n";
 		}
+		camposAMostrar = "";  // Prepara para la siguiente ejecución
 		return ret;
 	}
-	private static String atributosYValoresToStringRec( String mens, String sep, Object o, boolean tbStatic, boolean mostrarTam ) {
+	/** Devuelve un despliegue de los atributos (y sus valores, y sus tamaños en memoria) de un objeto,
+	 * explorando en profundidad todos los objetos contenidos en él.
+	 * @param mens	Mensaje inicial que se muestra en consola en la primera línea
+	 * @param mens	Separador (de tabulación) que se usa en cada línea de atributo
+	 * @param o	Objeto que se quiere analizar
+	 * @param tbStatic	true si se quieren visualizar también los atributos estáticos
+	 * @param mostrarTam true si se quiere mostrar el tamaño ocupado por el objeto y sus atributos
+	 * @param camposAMostrar String que incluye los nombres de campos que queremos mostrar (el resto no aparecen en el resultado).<p>
+	 * Por ejemplo, si queremos los atributos root y left podríamos pasar "root#left" a este parámetro.
+	 * @return	String maquetado con toda la información
+	 */
+	public static String atributosYValoresToString( String mens, String sep, Object o, boolean tbStatic, boolean mostrarTam, String camposAMostrar ) {
+		AccesoAAtributos.camposAMostrar = camposAMostrar;
+		return atributosYValoresToString(mens, sep, o, tbStatic, mostrarTam);
+	}
+	private static void atributosYValoresToStringRec( String mens, String sep, Object o, boolean tbStatic, boolean mostrarTam ) {
 		String miSep = sep+SEPR;
 		String sepSgte = miSep;
 		if (numLlamadas > NUM_MAX_SEPRS) {
 			miSep = sep + "...(" + numLlamadas + ") ";
 			sepSgte = sep;
 		}
-		String ret = (mens.equals("")) ? "" : (mens + "\n");
-		String atsInstancia = !tbStatic ? "" : "Atributos de instancia:\n";
-		String atsStatic = "Atributos de clase (static):\n";
-		String atsErr = "Errores de acceso a atributos:\n";
-		boolean hayErr = false;
 		Class<?> c = o.getClass();
 		Field fs[] = c.getDeclaredFields();
 		if (c.getName().startsWith("[")) {  // El objeto es un array. Ojo entonces no tiene atributos - es un objeto especial
@@ -81,8 +106,8 @@ public class AccesoAAtributos {
 				tamanyo = tamArr * TAM_REF_EN_BYTES;
 			String tam = "{" + tamanyo + "} ";
 			tamObjeto += tamanyo;
-			// TODO
-			atsInstancia += (miSep + tam + " <" + tamArr + ">*" + aString(o, o.getClass()) + "\n");
+			if (camposAMostrar.equals(""))
+				atsInstancia += (miSep + tam + " <" + tamArr + ">*" + aString(o, o.getClass()) + "\n");
 			if (!TAM_EN_BYTES.containsKey(tipoArr)) {
 				// for de proceso de elementos de array si son objetos (y no son nulls)
 				numLlamadas++;
@@ -90,11 +115,13 @@ public class AccesoAAtributos {
 					Object oArr = valorArray(o,i);
 					if (oArr!=null) {
 						if (objetosYaRecorridos.contains( oArr )) {  // Si ya está recorrido, no insistimos :-)
-							atsInstancia += (miSep + SEPR + "{} [" + i + "] = " + MARCA_OBJETO_YA_VISITADO + aString(oArr, oArr.getClass()) + "\n" );
+							if (camposAMostrar.equals(""))
+								atsInstancia += (miSep + SEPR + "{} [" + i + "] = " + MARCA_OBJETO_YA_VISITADO + aString(oArr, oArr.getClass()) + "\n" );
 						} else {
-							atsInstancia += (miSep + SEPR+ "{} [" + i + "] = " + aString(oArr, oArr.getClass()) + "\n" );
+							if (camposAMostrar.equals(""))
+								atsInstancia += (miSep + SEPR+ "{} [" + i + "] = " + aString(oArr, oArr.getClass()) + "\n" );
 							objetosYaRecorridos.add( oArr );
-							atsInstancia += atributosYValoresToStringRec("", sepSgte+SEPR, oArr, tbStatic, mostrarTam );
+							atributosYValoresToStringRec("", sepSgte+SEPR, oArr, tbStatic, mostrarTam );
 						}
 					}
 				}
@@ -106,7 +133,8 @@ public class AccesoAAtributos {
 					f.setAccessible(true);
 					if (Modifier.isStatic(f.getModifiers())) {
 						if (tbStatic)
-							atsStatic += (miSep + f.getName() + " = " + aString(f.get( null ), f.getType()) + "\n" );
+							if (camposAMostrar.equals("") || camposAMostrar.contains(f.getName()))
+								atsStatic += (miSep + f.getName() + " = " + aString(f.get( null ), f.getType()) + "\n" );
 					} else {
 						// atsInstancia += ( "#" + f.getType().toString().substring(6) );
 						// atsInstancia += ( "# - #" + c.getName().toString() + "#\n" );
@@ -141,18 +169,21 @@ public class AccesoAAtributos {
 							//	Si quisiéramos diferenciar el objeto con definición recursiva directa
 							//	if (f.getType().toString().substring(6).equals( c.getName().toString() )) {
 							if (objetosYaRecorridos.contains( f.get(o) )) {  // Si ya está recorrido, no insistimos :-)
-								atsInstancia += (miSep + tam + f.getName() + " = " + MARCA_OBJETO_YA_VISITADO + aString(f.get( o ), f.getType()) + "\n" );
+								if (camposAMostrar.equals("") || camposAMostrar.contains(f.getName()))
+									atsInstancia += (miSep + tam + f.getName() + " = " + MARCA_OBJETO_YA_VISITADO + aString(f.get( o ), f.getType()) + "\n" );
 							} else {
-								atsInstancia += (miSep + tam + f.getName() + " = " + aString(f.get( o ), f.getType()) + "\n" );
+								if (camposAMostrar.equals("") || camposAMostrar.contains(f.getName()))
+									atsInstancia += (miSep + tam + f.getName() + " = " + aString(f.get( o ), f.getType()) + "\n" );
 								objetosYaRecorridos.add( f.get(o) );
 								if (numLlamadas > NUM_MAX_LLAMADAS) {  
 									atsInstancia += (miSep + "TRUNCADO POR EXCESO DE RECURSIVIDAD\n");
 								} else {
-									atsInstancia += atributosYValoresToStringRec("", sepSgte, f.get(o), tbStatic, mostrarTam );
+									atributosYValoresToStringRec("", sepSgte, f.get(o), tbStatic, mostrarTam );
 								}
 							}
 						} else {
-							atsInstancia += (miSep + tam + f.getName() + " = " + aString(f.get( o ), f.getType()) + "\n" );
+							if (camposAMostrar.equals("") || camposAMostrar.contains(f.getName()))
+								atsInstancia += (miSep + tam + f.getName() + " = " + aString(f.get( o ), f.getType()) + "\n" );
 						}
 						numLlamadas--;
 					}
@@ -163,16 +194,13 @@ public class AccesoAAtributos {
 	//					atsInstancia += ("  " + f.getName() + " = " + aString(f.get( o )) + "\n" );
 	//				}
 				} catch (Exception e) {
-					atsErr += ( miSep + f.getName() + " (Error " + e.getClass().getName() + " / " + e.getMessage() + ")\n");
+					if (camposAMostrar.equals("") || camposAMostrar.contains(f.getName()))
+						atsErr += ( miSep + f.getName() + " (Error " + e.getClass().getName() + " / " + e.getMessage() + ")\n");
 					hayErr = true;
 					e.printStackTrace();
 				}
 			}
 		}
-		ret += atsInstancia;
-		if (tbStatic) ret += atsStatic;
-		if (hayErr) ret += atsErr;
-		return ret;
 	}
 
 		// Devuelve el tipo base del array o
@@ -304,6 +332,9 @@ public class AccesoAAtributos {
 			return ret;
 		}
 
+		class ClaseInterna {
+			int val;
+		}
 		
 	/** Prueba de la clase de acceso a atributos
 	 * @param args
@@ -311,6 +342,10 @@ public class AccesoAAtributos {
 	public static void main(String[] args) {
 		Integer o = new Integer(7);
 		System.out.println( atributosYValoresToString( "INTEGER 7", "", o, true, false ) );
+		
+		
+		ClaseInterna intt = (new AccesoAAtributos()).new ClaseInterna();
+		System.out.println( atributosYValoresToString( "Clase interna", "", intt, true, false ) );
 		
 		String tit = "ARRAY DE ENTEROS CON 7";
 		int[] ar = new int[10];
@@ -344,12 +379,28 @@ public class AccesoAAtributos {
 		hm.put( "Clave2", 2 );
 		System.out.println( atributosYValoresToString( tit, "", hm, false, true ) );
 
+		tit = "HASHSET DE STRINGS (vacío, cap. inicial 2, con 1, 2, 3 y 4 elementos)";
+		HashSet<String> hs = new HashSet<>(2);
+		System.out.println( atributosYValoresToString( tit, "", hs, false, true ) );
+		hs.add( "Andoni" );
+		System.out.println( atributosYValoresToString( tit, "", hs, false, true ) );
+		hs.add( "Elena" );
+		System.out.println( atributosYValoresToString( tit, "", hs, false, true ) );
+		hs.add( "Rosa" );
+		System.out.println( atributosYValoresToString( tit, "", hs, false, true ) );
+		hs.add( "Asier" );
+		System.out.println( atributosYValoresToString( tit, "", hs, false, true ) );
+
 		tit = "TREESET DE STRINGS";
 		TreeSet<String> ts = new TreeSet<>();
-		ts.add( "Val1" );
-		ts.add( "Val2" );
-		ts.add( "Val3" );
+		ts.add( "Andoni" );
+		ts.add( "Elena" );
+		ts.add( "Asier" );
+		ts.add( "Rosa" );
 		System.out.println( atributosYValoresToString( tit, "", ts, false, true ) );
+		tit = "TREESET DE STRINGS SOLO CON LA ESTRUCTURA";
+		System.out.println( atributosYValoresToString( tit, "", ts, false, false, 
+				"root#key#left#right" ) );
 
 	}
 	

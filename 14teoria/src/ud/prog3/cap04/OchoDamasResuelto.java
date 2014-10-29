@@ -4,7 +4,10 @@ import javax.swing.*;
 
 import java.awt.*;
 
+@SuppressWarnings("serial")
 public class OchoDamasResuelto extends JFrame {
+	private static final int RETRASO_INICIAL = 5000;  // msgs
+	private static final int PARADA_EN_CADA_PRUEBA = 100;  // msgs
 	JLabel[][] tablero = new JLabel[8][8];
 	JLabel lMensaje = new JLabel();
 	public OchoDamasResuelto() {
@@ -29,16 +32,18 @@ public class OchoDamasResuelto extends JFrame {
 	public static void main(String[] args) {
 		OchoDamasResuelto v = new OchoDamasResuelto();
 		v.setVisible( true );
-		try { Thread.sleep(5000); } catch (Exception e) {}		
+		try { Thread.sleep( RETRASO_INICIAL ); } catch (Exception e) {}		
 		System.out.println( "Resuelto? " + v.resolverTableroDesdeFila( v.tablero, 0 ) );
 	}
 
 	public boolean resolverTableroDesdeFila( JLabel[][] tablero, int fila ) {
-		try { Thread.sleep(10); } catch (Exception e) {}
+		try { Thread.sleep(PARADA_EN_CADA_PRUEBA); } catch (Exception e) {}
 		if (fila==8) {
 			lMensaje.setText( "Problema resuelto!" );
-			try { Thread.sleep(1000); } catch (Exception e) {}
-			return false;
+			return true; 
+			// Este código en vez del return true iría probando todas las soluciones:
+			// try { Thread.sleep(1000); } catch (Exception e) {}
+			// return false;
 		} else {
 			for (int col=0; col<8; col++) {
 				tablero[fila][col].setText( "D" );

@@ -11,10 +11,18 @@ import java.util.ListIterator;
 public class PruebasListas {
 		
 	private static void pruebaEspacioListas( int numPrueba ) {
+//		Long lll = null;
+//		Integer iii = null;
 		visuMem( "Al inicio", true );
 		visuMem( "Tras inicialización", true );
+//		lll = new Long(5);
+//		visuMem( "Tras inicialización long", true );
+//		System.out.println( lll );
+//		iii = new Integer(5);
+//		visuMem( "Tras inicialización integer", true );
+//		System.out.println( iii );
 		if (numPrueba==1 || numPrueba==3) {
-			ArrayList<Object> l = new ArrayList<Object>();
+			ArrayList<Object> l = new ArrayList<Object>(16);
 			visuMem( "Tras crear ArrayList (tam = " + l.size() + ", cap = " + UtilidadArrayList.getArrayListCapacity(l) + ")", true, true );
 			int num = 75;
 			for (int i=0; i<num; i++) {
@@ -153,9 +161,9 @@ public class PruebasListas {
 	}
 	
 	public static void main(String[] args) {
-		int numPrueba = 1;  // Ver ArrayList
+		// int numPrueba = 1;  // Ver ArrayList
 		// int numPrueba = 2;  // Ver LinkedList
-		// int numPrueba = 3;  // Ver ArrayList y LinkedList
+		int numPrueba = 3;  // Ver ArrayList y LinkedList
 		System.out.println( "Test 1 - mejor ver el segundo que es más aproximado en uso de memoria");
 		pruebaEspacioListas( numPrueba );
 		System.out.println();

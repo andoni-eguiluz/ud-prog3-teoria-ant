@@ -5,6 +5,7 @@ package ud.prog3.varios;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -18,8 +19,14 @@ import java.util.TreeSet;
 public class AccesoAAtributos {
 	private static String SEPR = "  "; // "\t";
 	private static String MARCA_OBJETO_YA_VISITADO = "<#> ";
-	private static int NUM_MAX_LLAMADAS = 100;  // Número de llamadas recursivas que se permiten - más se truncan
+	private static String MARCA_OBJETO_PARCIAL = "<...> ";
+	private static String TEXTO_METADATOS = "<Metadatos: Ref.Clase + Flags + Locks>";
+	private static int TAM_METADATOS = 12;
+	private static int NUM_MAX_LLAMADAS = 50;  // Número de llamadas recursivas que se permiten - más se truncan
+	private static int NUM_MAX_ITERATIVIDAD_VISUAL = 100;  // Número de recorrido iterativo máximo que se permite visualizar - más se computa pero no se visualiza
+	private static int NUM_MAX_ITERATIVIDAD = 10000000;  // Número de recorrido iterativo máximo que se permite - más se truncan (ni se visualizan ni se computan)
 	private static int NUM_MAX_SEPRS = 10; // Número de llamadas recursivas que se visualizan con separador - más se mantiene la separación y se indica "...(n) " al principio
+	private static int NUM_REC_COINC = 5;  // Número de llamadas recursivas coincidentes en atributo y espacio para hacer iteratividad
 	private static int TAM_REF_EN_BYTES = 4;
 	private static HashMap<String, Integer> TAM_EN_BYTES;
 	static {
@@ -43,6 +50,7 @@ public class AccesoAAtributos {
 	private static String atsStatic = "";
 	private static String atsErr = "";
 	private static boolean hayErr = false;
+	private static UltimasN<AtributoYEspacio> ultimosAtEsp = new UltimasN<>(NUM_REC_COINC);
 	
 	/** Calcula un string para visualización de atributos (y sus valores, y sus tamaños en memoria) del objeto indicado
 	 * @param mens	Mensaje inicial que se muestra en consola en la primera línea
@@ -61,14 +69,14 @@ public class AccesoAAtributos {
 		tamObjeto = 0;
 		hayErr = false;
 		// objetosYaRecorridos = new HashSet<>();  // Hecho ya una vez en inicialización
+		// ultimosAtEsp = new UltimasN<>(5);  // Hecho ya en inicialización
 		atributosYValoresToStringRec( mens, sep, o, tbStatic, mostrarTam );
 		objetosYaRecorridos.clear();
+		ultimosAtEsp.clear();
 		ret += atsInstancia;
 		if (tbStatic) ret += atsStatic;
 		if (hayErr) ret += atsErr;
-		if (mostrarTam) {
-			ret += "{" + tamObjeto + "}\n";
-		}
+		if (mostrarTam) ret += (tamDe(tamObjeto) + "\n");
 		camposAMostrar = "";  // Prepara para la siguiente ejecución
 		return ret;
 	}
@@ -85,8 +93,9 @@ public class AccesoAAtributos {
 	 */
 	public static String atributosYValoresToString( String mens, String sep, Object o, boolean tbStatic, boolean mostrarTam, String camposAMostrar ) {
 		AccesoAAtributos.camposAMostrar = camposAMostrar;
-		return atributosYValoresToString(mens, sep, o, tbStatic, mostrarTam);
+		return atributosYValoresToString(mens, sep, o, tbStatic, mostrarTam );
 	}
+		private static String tamDe(int tam) { return "{" + tam + "} "; }
 	private static void atributosYValoresToStringRec( String mens, String sep, Object o, boolean tbStatic, boolean mostrarTam ) {
 		String miSep = sep+SEPR;
 		String sepSgte = miSep;
@@ -96,6 +105,8 @@ public class AccesoAAtributos {
 		}
 		Class<?> c = o.getClass();
 		Field fs[] = c.getDeclaredFields();
+		tamObjeto += TAM_METADATOS;
+		if (mostrarTam) atsInstancia += (miSep + tamDe(TAM_METADATOS) + TEXTO_METADATOS + "\n" );
 		if (c.getName().startsWith("[")) {  // El objeto es un array. Ojo entonces no tiene atributos - es un objeto especial
 			String tipoArr = tipoArray(o);
 			int tamArr = tamArray(o);
@@ -104,7 +115,7 @@ public class AccesoAAtributos {
 				tamanyo = tamArr * TAM_EN_BYTES.get( tipoArr );
 			else
 				tamanyo = tamArr * TAM_REF_EN_BYTES;
-			String tam = "{" + tamanyo + "} ";
+			String tam = (mostrarTam) ? tamDe(tamanyo) : "";
 			tamObjeto += tamanyo;
 			if (camposAMostrar.equals(""))
 				atsInstancia += (miSep + tam + " <" + tamArr + ">*" + aString(o, o.getClass()) + "\n");
@@ -114,12 +125,13 @@ public class AccesoAAtributos {
 				for (int i=0; i<tamArr; i++) {
 					Object oArr = valorArray(o,i);
 					if (oArr!=null) {
+						String tamA = (mostrarTam) ? "{} " : "";
 						if (objetosYaRecorridos.contains( oArr )) {  // Si ya está recorrido, no insistimos :-)
-							if (camposAMostrar.equals(""))
-								atsInstancia += (miSep + SEPR + "{} [" + i + "] = " + MARCA_OBJETO_YA_VISITADO + aString(oArr, oArr.getClass()) + "\n" );
+							if (camposAMostrar.equals("") || camposAMostrar.contains("[]"))
+								atsInstancia += (miSep + SEPR + tamA + "[" + i + "] = " + MARCA_OBJETO_YA_VISITADO + aString(oArr, oArr.getClass()) + "\n" );
 						} else {
-							if (camposAMostrar.equals(""))
-								atsInstancia += (miSep + SEPR+ "{} [" + i + "] = " + aString(oArr, oArr.getClass()) + "\n" );
+							if (camposAMostrar.equals("") || camposAMostrar.contains("[]"))
+								atsInstancia += (miSep + SEPR + tamA + "[" + i + "] = " + aString(oArr, oArr.getClass()) + "\n" );
 							objetosYaRecorridos.add( oArr );
 							atributosYValoresToStringRec("", sepSgte+SEPR, oArr, tbStatic, mostrarTam );
 						}
@@ -141,11 +153,11 @@ public class AccesoAAtributos {
 						String tam = "";
 						if (mostrarTam) {  // Cálculo tamaño
 							int tamanyo = 0;
-							if (f.getType().toString().startsWith("class [") && f.get(o)!=null) {
+							if (f.getType().toString().startsWith("class [")) { //&& f.get(o)!=null) {
 								tamanyo = TAM_REF_EN_BYTES;  // Un array es una referencia
 							} else if (f.getType().toString().startsWith("class ")) {
 								tamanyo = TAM_REF_EN_BYTES;
-							} else if (f.getType().toString().startsWith("interface [") && f.get(o)!=null) {
+							} else if (f.getType().toString().startsWith("interface [")) { //&& f.get(o)!=null) {
 								tamanyo = TAM_REF_EN_BYTES;  // Un array es una referencia
 							} else if (f.getType().toString().startsWith("interface "))
 								tamanyo = TAM_REF_EN_BYTES;
@@ -160,7 +172,7 @@ public class AccesoAAtributos {
 								}
 								tamanyo = 4;
 							}
-							tam = "{" + tamanyo + "} ";
+							tam = tamDe(tamanyo);
 							tamObjeto += tamanyo;
 						}
 						numLlamadas++;
@@ -175,10 +187,68 @@ public class AccesoAAtributos {
 								if (camposAMostrar.equals("") || camposAMostrar.contains(f.getName()))
 									atsInstancia += (miSep + tam + f.getName() + " = " + aString(f.get( o ), f.getType()) + "\n" );
 								objetosYaRecorridos.add( f.get(o) );
+								int difEspacio = -1;  // Variable que sólo es != -1 si hay iteratividad en vez de recursividad (ver código subsiguiente)
+								if (numLlamadas == NUM_MAX_LLAMADAS) {
+									if (ultimosAtEsp.getEquals()!=null && ultimosAtEsp.getEquals().atributo.equals(f.getName()) && f.get(o)!=null ) {
+										// La recursividad n-1 es del mismo campo que tenemos ahora
+										// 1.- Comprobamos que el espacio se haya ido aumentando de forma coherente
+										int espacioIni = ultimosAtEsp.get(1).espacio;
+										difEspacio = ultimosAtEsp.get(0).espacio - espacioIni;
+										for (int i=2; i<ultimosAtEsp.size(); i++) {
+											if (difEspacio != espacioIni - ultimosAtEsp.get(i).espacio) {
+												difEspacio = -1; break;
+											} else {
+												espacioIni = ultimosAtEsp.get(i).espacio;
+											}
+										}
+										// 2.- si es así, iniciamos proceso iterativo
+										if (difEspacio!=-1) {
+											// Proceso iterativo en vez de recursivo!!
+											miSep = sep + SEPR;
+											Object ref = f.get(o);  // Referencia inicial
+											atsInstancia += (miSep + "MOSTRADO ITERATIVAMENTE POR EXCESO DE RECURSIVIDAD (Información parcial, cálculo de espacio correcto)\n");
+											String sTam = mostrarTam ? tamDe(difEspacio) : "";
+											boolean errNoRecursivo = true;
+											int numIt = NUM_MAX_LLAMADAS;
+											while (ref != null) {
+												Class<?> c2 = ref.getClass();
+												Field fs2[] = c2.getDeclaredFields();
+												errNoRecursivo = true;
+												for (Field f2 : fs2) {
+													f2.setAccessible(true);
+													if (f2.getName().equals(f.getName())) {
+														errNoRecursivo = false;
+														ref = f2.get(ref);
+														objetosYaRecorridos.add( ref );
+														if (numIt<NUM_MAX_ITERATIVIDAD_VISUAL) {
+															atsInstancia += (miSep + "...(" + numIt + ") " + sTam + f2.getName() + " = " + MARCA_OBJETO_PARCIAL + aString(ref, f2.getType()) + "\n" );
+														}
+														tamObjeto += difEspacio;
+													}
+												}
+												if (errNoRecursivo) ref = null;
+												if (numIt>=NUM_MAX_ITERATIVIDAD) {
+													ref = null;
+													break;
+												}
+												numIt++;
+											}
+											if (numIt>=NUM_MAX_ITERATIVIDAD_VISUAL)
+												atsInstancia += (miSep + "(...) REFERENCIAS ADICIONALES NO MOSTRADAS POR EXCESO DE TAMAÑO (cálculo de espacio correcto)\n");
+											if (numIt>=NUM_MAX_ITERATIVIDAD)
+												atsInstancia += (miSep + "ERROR: ALCANZADO TAMAÑO MAXIMO = " + numIt + " (Información parcial, cálculo total de espacio INCORRECTO)\n");
+											if (errNoRecursivo) {
+												atsInstancia += (miSep + "ERROR EN RECURSIVIDAD (Información incorrecta: enlace de objetos no coherente en algún punto)\n");
+											}
+										}
+									}
+								}
 								if (numLlamadas > NUM_MAX_LLAMADAS) {  
 									atsInstancia += (miSep + "TRUNCADO POR EXCESO DE RECURSIVIDAD\n");
-								} else {
+								} else if (difEspacio==-1){
+									ultimosAtEsp.push( new AtributoYEspacio( f.getName(), tamObjeto ));
 									atributosYValoresToStringRec("", sepSgte, f.get(o), tbStatic, mostrarTam );
+									if (ultimosAtEsp.size()>0) ultimosAtEsp.pop();
 								}
 							}
 						} else {
@@ -332,10 +402,6 @@ public class AccesoAAtributos {
 			return ret;
 		}
 
-		class ClaseInterna {
-			int val;
-		}
-		
 	/** Prueba de la clase de acceso a atributos
 	 * @param args
 	 */
@@ -343,8 +409,7 @@ public class AccesoAAtributos {
 		Integer o = new Integer(7);
 		System.out.println( atributosYValoresToString( "INTEGER 7", "", o, true, false ) );
 		
-		
-		ClaseInterna intt = (new AccesoAAtributos()).new ClaseInterna();
+		ClaseExterna.ClaseInterna intt = (new ClaseExterna()).new ClaseInterna();
 		System.out.println( atributosYValoresToString( "Clase interna", "", intt, true, false ) );
 		
 		String tit = "ARRAY DE ENTEROS CON 7";
@@ -352,9 +417,11 @@ public class AccesoAAtributos {
 		ar[0] = 7;
 		System.out.println( atributosYValoresToString( tit, "", ar, false, true ) );
 
-		tit = "ARRAYLIST DE ENTEROS CON 7";
+		tit = "ARRAYLIST DE ENTEROS CON 7,2,3";
 		ArrayList<Integer> al = new ArrayList<>();
 		al.add( new Integer(7) );
+		al.add( new Integer(2) );
+		al.add( new Integer(3) );
 		System.out.println( atributosYValoresToString( tit, "", al, false, true ) );
 		
 		tit = "LINKEDLIST DE ENTEROS CON 7,2,3";
@@ -391,6 +458,13 @@ public class AccesoAAtributos {
 		hs.add( "Asier" );
 		System.out.println( atributosYValoresToString( tit, "", hs, false, true ) );
 
+		tit = "HASHSET DE STRINGS SOLO CON LA ESTRUCTURA";
+		System.out.println( atributosYValoresToString( tit, "", hs, false, false, 
+				"map#table#hash#key#value#next#size#loadFactor#[]" ) );
+		// Ad hoc para este ejemplo...
+		System.out.println( "2553165 % 8 = " + (2553165%8) + "   -    63559309 % 8 = " + (63559309%8) );
+		System.out.println();
+		
 		tit = "TREESET DE STRINGS";
 		TreeSet<String> ts = new TreeSet<>();
 		ts.add( "Andoni" );
@@ -398,10 +472,85 @@ public class AccesoAAtributos {
 		ts.add( "Asier" );
 		ts.add( "Rosa" );
 		System.out.println( atributosYValoresToString( tit, "", ts, false, true ) );
+
 		tit = "TREESET DE STRINGS SOLO CON LA ESTRUCTURA";
 		System.out.println( atributosYValoresToString( tit, "", ts, false, false, 
 				"root#key#left#right" ) );
 
+		
 	}
 	
+}
+
+// Clase de prueba para main() de prueba
+class ClaseExterna {
+	int atribExterno;
+	public static String atributoDeClaseExterna;
+	class ClaseInterna {
+		int atribInterno;
+	}
+}
+
+class UltimasN<T> {
+	int n;
+	LinkedList<T> l;
+	public UltimasN(int n) {
+		this.n = n;
+		this.l = new LinkedList<>();
+	}
+	public void push(T t) {
+		l.push(t);
+		if (l.size()>n) l.removeLast();
+	}
+	public T pop() {
+		return l.pop();
+	}
+	public T get( int i ) {
+		return l.get(i);
+	}
+	public int size() {
+		return l.size();
+	}
+	public boolean areAllEqual() {
+		if (l.size()<1) return false;
+		T first = l.get(0);
+		for (int i=1; i<l.size(); i++) {
+			if (!first.equals(l.get(i))) return false;
+		}
+		return true;
+	}
+	public T getEquals() {
+		if (l.size()<1) return null;
+		T first = l.get(0);
+		for (int i=1; i<l.size(); i++) {
+			if (!first.equals(l.get(i))) return null;
+		}
+		return first;
+	}
+	public void clear() {
+		l.clear();
+	}
+	@Override
+	public String toString() {
+		return l.toString();
+	}
+}
+
+class AtributoYEspacio {
+	public String atributo;
+	public int espacio;
+	public AtributoYEspacio( String atributo, int espacio ) {
+		this.atributo = atributo;
+		this.espacio = espacio;
+	}
+	@Override
+	public boolean equals( Object o ) {
+		if (!(o instanceof AtributoYEspacio)) return false;
+		AtributoYEspacio ae = (AtributoYEspacio) o;
+		return (atributo.equals(ae.atributo));
+	}
+	@Override
+	public String toString() {
+		return atributo + ":{" + espacio + "}";
+	}
 }

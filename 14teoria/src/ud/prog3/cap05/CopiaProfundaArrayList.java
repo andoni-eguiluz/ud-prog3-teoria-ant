@@ -53,6 +53,9 @@ public class CopiaProfundaArrayList {
 							p2.apellidos+", "+p2.nombre);
 			}
 		});
+		// Con el Comparator se podría ordenar por cualquier criterio. P ej:
+		// Comparator<Persona> otroComparador = new ComparatorApellNombre();
+		// lPers2.sort( otroComparador );
 		System.out.println( "A ver ahora... " );
 		System.out.println( " " + lPers2 );
 		System.out.println();
@@ -68,7 +71,7 @@ public class CopiaProfundaArrayList {
 
 }
 
-class Persona {
+class Persona implements Comparable<Persona> {
 	int dni;
 	char letraDni;
 	String nombre;
@@ -87,5 +90,23 @@ class Persona {
 	@Override
 	public String toString() {
 		return ""+dni+letraDni+" - "+nombre+" "+apellidos;
+	}
+	@Override
+	public int compareTo(Persona o) {
+		return this.dni - o.dni;
+	}
+}
+
+class ComparatorApellNombre implements Comparator<Persona> {
+	@Override
+	public int compare(Persona o1, Persona o2) {
+		int comp = o1.apellidos.compareTo( o2.apellidos );
+		if (comp==0) {
+			comp = o1.nombre.compareTo( o2.nombre );
+			if (comp==0) {
+				comp = o1.dni - o2.dni;
+			}
+		}
+		return comp;
 	}
 }

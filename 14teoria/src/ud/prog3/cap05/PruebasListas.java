@@ -167,6 +167,7 @@ public class PruebasListas {
 		System.out.println( "Test 1 - mejor ver el segundo que es más aproximado en uso de memoria");
 		pruebaEspacioListas( numPrueba );
 		System.out.println();
+		pruebaEspacioListas( numPrueba );
 		System.out.println( "Test 2 - VER ESTE:");
 		pruebaEspacioListas( numPrueba );
 		pruebaTiempoListas( numPrueba );

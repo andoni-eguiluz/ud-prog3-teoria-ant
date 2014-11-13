@@ -14,13 +14,14 @@ public class AccesoAPersonasHS implements ProcesoProbable {
 		}
 	}
 
+	public int cont;  // Se hace el contador atributo para que la actualización del contador del test no pueda ser optimizada (y eliminada) por el compilador
 	@Override
 	public Object test() {
-		int cont = 0;
+		cont = 0;
 		for (int i=0; i<l.size(); i++) {
 			if (l.contains( new Persona(i,"","") )) cont++;
 		}
-		System.out.println( "Número personas encontradas: " + cont );
+		// System.out.println( "Número personas encontradas: " + cont );
 		return l;
 	}
 
@@ -30,7 +31,7 @@ public class AccesoAPersonasHS implements ProcesoProbable {
 	public static void main(String[] args) {
 		AccesoAPersonasHS proc = new AccesoAPersonasHS();
 		long tiempo = BancoDePruebas.realizaTest( proc, 500000 );
-		int espacio = BancoDePruebas.getTamanyoTest( proc );
+		int espacio = BancoDePruebas.getTamanyoTest();
 		System.out.println( "Prueba HashSet de 50000 -- tiempo: " + tiempo + " msgs. / espacio = " + espacio + " bytes.");
 	}
 

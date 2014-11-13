@@ -142,7 +142,10 @@ public class PanelDibujoBancoDePruebas extends JPanel {
 		g2.setColor( colores.get(numProc) );
 		int x = calcX( tamanyos.get(numTam) );
 		int y = calcYTiempo( tiempos[numProc].get(numTam) );
-		g2.drawOval( x-RADIO_CIRCULO_PUNTO, y-RADIO_CIRCULO_PUNTO, RADIO_CIRCULO_PUNTO*2, RADIO_CIRCULO_PUNTO*2 );
+		if (marcadaFila(numProc))
+			g2.fillOval( x-RADIO_CIRCULO_PUNTO, y-RADIO_CIRCULO_PUNTO, RADIO_CIRCULO_PUNTO*2, RADIO_CIRCULO_PUNTO*2 );
+		else
+			g2.drawOval( x-RADIO_CIRCULO_PUNTO, y-RADIO_CIRCULO_PUNTO, RADIO_CIRCULO_PUNTO*2, RADIO_CIRCULO_PUNTO*2 );
 		if (numTam>0) {  // Dibujar línea
 			int xAnt = calcX( tamanyos.get(numTam-1) );
 			int yAnt = calcYTiempo( tiempos[numProc].get(numTam-1) );
@@ -161,7 +164,10 @@ public class PanelDibujoBancoDePruebas extends JPanel {
 		g2.setColor( colores.get(numProc) );
 		int x = calcX( tamanyos.get(numTam) );
 		int y = calcYEspacio( espacios[numProc].get(numTam) );
-		g2.drawOval( x-RADIO_CIRCULO_PUNTO, y-RADIO_CIRCULO_PUNTO, RADIO_CIRCULO_PUNTO*2, RADIO_CIRCULO_PUNTO*2 );
+		if (marcadaFila(numProc+nombresPruebas.length))
+			g2.fillOval( x-RADIO_CIRCULO_PUNTO, y-RADIO_CIRCULO_PUNTO, RADIO_CIRCULO_PUNTO*2, RADIO_CIRCULO_PUNTO*2 );
+		else
+			g2.drawOval( x-RADIO_CIRCULO_PUNTO, y-RADIO_CIRCULO_PUNTO, RADIO_CIRCULO_PUNTO*2, RADIO_CIRCULO_PUNTO*2 );
 		if (numTam>0) {  // Dibujar línea
 			int xAnt = calcX( tamanyos.get(numTam-1) );
 			int yAnt = calcYEspacio( espacios[numProc].get(numTam-1) );
@@ -179,20 +185,44 @@ public class PanelDibujoBancoDePruebas extends JPanel {
 	public void redibujaTodo() {
 		g2.setStroke( stroke1 );
 		pintaFondo( new Color( 1,1,1,1f ) );  // Blanco con opacidad del 100%
-		dibujaEjes();
+		dibujaEjesEspacio();
+		// Dibuja primero los tamaños
+		for (int numProc=0; numProc<tiempos.length; numProc++) {
+			for (int numTam=0; numTam<tamanyos.size(); numTam++) {
+				if (espacios[numProc].size() > numTam) {   // Dibuja espacio
+					 dibujarEspacio( numProc, numTam );
+				}
+			}
+		}
+		// Borra lo que se haya podido pasar hacia arriba (en el espacio de los tiempos)
+		g2.setColor( Color.white );
+		g2.fillRect( 0, 0, getWidth(), getHeight()/2 );
+		// Y luego los tiempos
+		dibujaEjesTiempo();
 		for (int numProc=0; numProc<tiempos.length; numProc++) {
 			for (int numTam=0; numTam<tamanyos.size(); numTam++) {
 				if (tiempos[numProc].size() > numTam) {   // Dibuja tiempo
 					 dibujarTiempo( numProc, numTam );
-				}
-				if (espacios[numProc].size() > numTam) {   // Dibuja espacio
-					 dibujarEspacio( numProc, numTam );
 				}
 			}
 		}
 		repaint();
 	}
 
+	// true si acercar, false si alejar
+	public void cambiarZoom( boolean acercar ) {
+		if (acercar) {
+			if (maxTiempo>=2 && maxEspacio>=2) {
+				maxEspacio /= 2;
+				maxTiempo /= 2;
+			}
+		} else {
+			maxEspacio *= 2;
+			maxTiempo *= 2;
+		}
+		redibujaTodo();
+	}
+	
 	public Color getColor( int numProc ) {
 		return colores.get(numProc);
 	}
@@ -232,18 +262,25 @@ public class PanelDibujoBancoDePruebas extends JPanel {
 		return origenYTiempos - (int) Math.round( alto*y/maxTiempo );
 	}
 	
-	private void dibujaEjes() {
+	private void dibujaEjesEspacio() {
 		g2.setColor( Color.black );
 		g2.setStroke( stroke3 );
 		g2.drawLine( calcX(0), calcYEspacio(0), calcX(maxTamanyo), calcYEspacio(0) );
-		g2.drawLine( calcX(0), calcYTiempo(0), calcX(maxTamanyo), calcYTiempo(0) );
 		g2.drawLine( calcX(0), calcYEspacio(0), calcX(0), calcYEspacio(maxEspacio) );
-		g2.drawLine( calcX(0), calcYTiempo(0), calcX(0), calcYTiempo(maxTiempo) );
 		g2.setStroke( stroke1 );
-		dibujaMarcasEjes( 10, 8 );
+		dibujaMarcasEjes( true, 10, 8 );
 	}
 	
-	private void dibujaMarcasEjes( int marcasX, int marcasY ) {
+	private void dibujaEjesTiempo() {
+		g2.setColor( Color.black );
+		g2.setStroke( stroke3 );
+		g2.drawLine( calcX(0), calcYTiempo(0), calcX(maxTamanyo), calcYTiempo(0) );
+		g2.drawLine( calcX(0), calcYTiempo(0), calcX(0), calcYTiempo(maxTiempo) );
+		g2.setStroke( stroke1 );
+		dibujaMarcasEjes( false, 10, 8 );
+	}
+	
+	private void dibujaMarcasEjes( boolean esEspacio, int marcasX, int marcasY ) {
 		// Marcas horizontales
 		long espEntreMarcas = maxTamanyo / marcasX;
 		for (int i=0; i<marcasX; i++) {
@@ -254,23 +291,26 @@ public class PanelDibujoBancoDePruebas extends JPanel {
 			g2.drawString( ""+(x), calcX(x)-10, origenYTiempos+10 );
 		}
 		// Marcas verticales
-		espEntreMarcas = maxEspacio / marcasY;
-		for (int i=0; i<marcasY; i++) {
-			long y = espEntreMarcas * (i+1);
-			g2.drawLine( origenX-4, calcYEspacio(y), origenX+4, calcYEspacio(y) );
-			g2.drawLine( origenX-4, calcYEspacio(y), origenX+4, calcYEspacio(y) );
-			String texto = (y/1024)+"k";
-			int anchoTexto = g2.getFontMetrics().stringWidth( texto );
-			g2.drawString( texto, calcX(0)-anchoTexto-2, calcYEspacio(y)+5 );
-		}
-		espEntreMarcas = maxTiempo / marcasY;
-		for (int i=0; i<marcasY; i++) {
-			long y = espEntreMarcas * (i+1);
-			g2.drawLine( origenX-4, calcYTiempo(y), origenX+4, calcYTiempo(y) );
-			g2.drawLine( origenX-4, calcYTiempo(y), origenX+4, calcYTiempo(y) );
-			String texto = ""+y;
-			int anchoTexto = g2.getFontMetrics().stringWidth( texto );
-			g2.drawString( texto, calcX(0)-anchoTexto-2, calcYTiempo(y)+5 );
+		if (esEspacio) {
+			espEntreMarcas = maxEspacio / marcasY;
+			for (int i=0; i<marcasY; i++) {
+				long y = espEntreMarcas * (i+1);
+				g2.drawLine( origenX-4, calcYEspacio(y), origenX+4, calcYEspacio(y) );
+				g2.drawLine( origenX-4, calcYEspacio(y), origenX+4, calcYEspacio(y) );
+				String texto = (y/1024)+"k";
+				int anchoTexto = g2.getFontMetrics().stringWidth( texto );
+				g2.drawString( texto, calcX(0)-anchoTexto-2, calcYEspacio(y)+5 );
+			}
+		} else {
+			espEntreMarcas = maxTiempo / marcasY;
+			for (int i=0; i<marcasY; i++) {
+				long y = espEntreMarcas * (i+1);
+				g2.drawLine( origenX-4, calcYTiempo(y), origenX+4, calcYTiempo(y) );
+				g2.drawLine( origenX-4, calcYTiempo(y), origenX+4, calcYTiempo(y) );
+				String texto = ""+y;
+				int anchoTexto = g2.getFontMetrics().stringWidth( texto );
+				g2.drawString( texto, calcX(0)-anchoTexto-2, calcYTiempo(y)+5 );
+			}
 		}
 	}
 

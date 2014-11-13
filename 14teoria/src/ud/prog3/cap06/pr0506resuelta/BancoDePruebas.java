@@ -8,26 +8,47 @@ public class BancoDePruebas {
 	private static long ultimoTiempo;
 	private static Object ultimoResultado;
 	
-	/** Realiza un test del banco de pruebas, inicializándolo previamente y devolviendo el tiempo que tarda
+	/** Realiza un test del banco de pruebas, inicializándolo previamente y devolviendo el tiempo que tarda<p>
 	 * @param proc	Proceso a probar
 	 * @param tamanyoPrueba	Tamaño a pasar a ese proceso (típicamente, tamaño de la estructura que ese proceso maneja)
-	 * @return	Tiempo que tarda el proceso (en milisegundos)
+	 * @return	Tiempo que tarda el proceso (en nanosegundos). 
 	 */
 	public static long realizaTest( ProcesoProbable proc, int tamanyoPrueba ) {
+		proc.init( tamanyoPrueba );
+		ultimoTiempo = System.nanoTime();
+		ultimoResultado = proc.test();
+		return System.nanoTime() - ultimoTiempo;
+	}	
+	
+	/** Realiza un test del banco de pruebas, inicializándolo previamente y devolviendo el tiempo que tarda<p>
+	 * Atención: la granularidad de la medición de tiempo de System.currentTimeMillis() hace que medir tiempos por debajo
+	 * de 10-15 milisegundos no sea nada preciso (especialmente en SO Windows). Usar System.nanoTime() en lugar de este método para ese caso.
+	 * @param proc	Proceso a probar
+	 * @param tamanyoPrueba	Tamaño a pasar a ese proceso (típicamente, tamaño de la estructura que ese proceso maneja)
+	 * @return	Tiempo que tarda el proceso (en milisegundos). 
+	 */
+	public static long realizaTestMillis( ProcesoProbable proc, int tamanyoPrueba ) {
 		proc.init( tamanyoPrueba );
 		ultimoTiempo = System.currentTimeMillis();
 		ultimoResultado = proc.test();
 		return System.currentTimeMillis() - ultimoTiempo;
-	}
+	}	
 	
-	/** Devuelve el tamaño del objeto creado por el test ya realizado del banco de pruebas.<p>
+	/** Devuelve el tamaño del objeto creado por el último test realizado del banco de pruebas.<p>
 	 * Previamente debe llamarse a realizaTest para que el proceso se realice y retorne ese objeto resultado.
-	 * @param proc
-	 * @return
+	 * @return	Tamaño del objeto resultado del último test, en bytes
 	 */
-	public static int getTamanyoTest( ProcesoProbable proc ) {
+	public static int getTamanyoTest() {
 		if (ultimoResultado==null) return 0;
 		return ExploradorObjetos.getTamanyoObjeto( ultimoResultado );
+	}
+	
+	/** Devuelve el objeto devuelto por el último test realizado del banco de pruebas.<p>
+	 * Previamente debe llamarse a realizaTest para que el proceso se realice y retorne ese objeto resultado.
+	 * @return	Objeto resultado del último test
+	 */
+	public static Object getTestResult() {
+		return ultimoResultado;
 	}
 	
 		// Clase de prueba del banco de pruebas
@@ -61,7 +82,7 @@ public class BancoDePruebas {
 		int tamanyo = 10;
 		while (tamanyo <= 1000000) {
 			long tiempo = realizaTest( proc, tamanyo );
-			int espacio = getTamanyoTest( proc );
+			int espacio = getTamanyoTest();
 			System.out.println( "Prueba array de " + tamanyo + " -- tiempo: " + tiempo + " msgs. / espacio = " + espacio + " bytes.");
 			tamanyo *= 10;
 		}

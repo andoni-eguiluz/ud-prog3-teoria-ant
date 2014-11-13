@@ -2,6 +2,8 @@ package ud.prog3.cap06.pr0506resuelta;
 
 import java.util.ArrayList;
 
+import javax.swing.SwingUtilities;
+
 import ud.prog3.cap06.pr0506resuelta.gui.VentanaBancoDePruebas;
 
 /** Prueba combinada de distintas estructuras de datos y distintos tamaños
@@ -11,6 +13,7 @@ import ud.prog3.cap06.pr0506resuelta.gui.VentanaBancoDePruebas;
 public class PruebaEstructurasPersonaVentana {
 
 	public static void main(String[] args) {
+		Utils.muestraThreadsActivos();
 		String[] pruebas = { "ArrayList", "LinkedList", "HashSet", "TreeSet" };
 		ArrayList<ProcesoProbable> procs = new ArrayList<ProcesoProbable>();
 		procs.add( new AccesoAPersonasAL() );
@@ -20,6 +23,7 @@ public class PruebaEstructurasPersonaVentana {
 		VentanaBancoDePruebas vent = new VentanaBancoDePruebas();
 		vent.setProcesos( pruebas, procs );
 		vent.setVisible( true );
+		Utils.muestraThreadsActivos();
 	}
 
 }

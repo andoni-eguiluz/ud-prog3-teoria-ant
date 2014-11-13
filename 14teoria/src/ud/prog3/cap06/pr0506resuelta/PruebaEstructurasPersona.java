@@ -17,7 +17,7 @@ public class PruebaEstructurasPersona {
 		while (tamanyo <= 100000) {
 			for (int prueba=0; prueba<4; prueba++) {
 				long tiempo = BancoDePruebas.realizaTest( procs[prueba], tamanyo );
-				int espacio = BancoDePruebas.getTamanyoTest( procs[prueba] );
+				int espacio = BancoDePruebas.getTamanyoTest();
 				System.out.println( "Prueba " + pruebas[prueba] + " de " + tamanyo + " -- tiempo: " + tiempo + " msgs. / espacio = " + espacio + " bytes.");
 			}
 			tamanyo *= 10;

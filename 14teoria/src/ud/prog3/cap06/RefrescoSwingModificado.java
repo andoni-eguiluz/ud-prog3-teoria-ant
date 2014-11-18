@@ -169,6 +169,11 @@ public class RefrescoSwingModificado {
         protected void paintComponent(Graphics g) {
             RefrescoSwingModificado.this.dibuja( g );
 	        numDibujados++;  // Conteo de dibujos
+	        if (ultimoDibujado!=0) {
+	        	System.out.print( (System.nanoTime()-ultimoDibujado)/1000000 + " " );
+	        	if (numDibujados % 50==0) System.out.println();
+	        }
+        	ultimoDibujado = System.nanoTime();
         }
     }
 
@@ -176,7 +181,7 @@ public class RefrescoSwingModificado {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-            	RefrescoSwingModificado animacion = new RefrescoSwingModificado(50);  // Probar a cambiar este valor -1, 0, 25, 50
+            	RefrescoSwingModificado animacion = new RefrescoSwingModificado(0);  // Probar a cambiar este valor -1, 0, 25, 50
             		// El FPS mide el número de repaints que se ejecutan... pero no son regulares y afecta a la calidad de vista
 
                 JFrame frame = new JFrame();

@@ -46,7 +46,6 @@ public class PruebaDibujarLinea extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		System.out.println( "paintC!!");
 		dibujarLinea( (Graphics2D) g, Color.red ); // ...Sin embargo, esta no admite dudas!!
 	}
 	

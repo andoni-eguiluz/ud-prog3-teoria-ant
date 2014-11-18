@@ -26,11 +26,13 @@ public class RefrescoSwingModificado {
 	private long pausaEntreFrames = 0;
 
 	/** Crea un objeto para hacer el refresco de Swing modificado para asegurar FPS
-	 * @param fpsDeseados	Número de fps que se quiere conseguir, <=0 si se buscan los máximos posibles
+	 * @param fpsDeseados	Número de fps que se quiere conseguir, 0 si se buscan los máximos posibles, -1 si no se quiere modificar el tiempo de refresco estándar de Swing
 	 */
 	public RefrescoSwingModificado( int fpsDeseados ) {
 		if (fpsDeseados > 0)
 			pausaEntreFrames = 1000/fpsDeseados; // msg de espera entre dibujado y dibujado
+		else
+			pausaEntreFrames = fpsDeseados;
         componente = new PanelDeDibujo();
 	}
 	
@@ -42,6 +44,7 @@ public class RefrescoSwingModificado {
 	}
 	
     /** Lanza la animación. Crea y lanza el hilo que recorre el bucle principal de animación/juego.
+     * Debe llamarse al método #detener() para que el hilo se pare, si no seguirá ejecutándose aún después de detenerse el EDT.
      */
     public final void lanzar() {
         imageBuffer = componente.createImage(componente.getWidth(),componente.getHeight());
@@ -87,24 +90,26 @@ public class RefrescoSwingModificado {
         componente.repaint();
         // 4.- Espera con un bloqueo a que ocurra el dibujado por parte del EDT 
         // (Al hacer la espera, el EDT se lanza casi inmediatamente)
-        esperaAlDibujado();
+        // (Si no se hace la espera -pausa<0- el EDT hará TODOS los repaint(), pero probablemente hará varios de repente
+        //  y no tiene por qué haber sincronía entre el cambio en pantalla y el redibujado)
+        if (pausaEntreFrames>=0) esperaAlDibujado();
         // Devuelve tiempo empleado en dibujado del frame
         return System.currentTimeMillis() - t;
     }
 
     	// Datos de ejemplo
-	    private int x = 50;
-	    private int y = 50;
-	    private int incX = +1;
-	    private int incY = +1;
+	    private double x = 50;
+	    private double y = 50;
+	    private double incX = +0.3;  // Pixels/msg
+	    private double incY = +0.3;
+	    private long antTiempo = System.currentTimeMillis();
     private void actualizarDatosModelo() {
         // TODO: Cambio de elementos de la animación/juego, basado en el tiempo (ejemplo: coords x e y que rebotan)
     	// Cambio de elementos de ejemplo:
-        x += incX; y += incY;
-        if (y>componente.getHeight()-2) incY = -1;
-        else if (y<0) incY = +1;
-        if (x>componente.getWidth()-5) incX = -1;
-        else if (x<0) incX = +1;
+        x += incX*(System.currentTimeMillis()-antTiempo); y += incY*(System.currentTimeMillis()-antTiempo);
+        antTiempo = System.currentTimeMillis();
+        if (x>componente.getWidth()-30 || x<0) { x -= incX; incX = -incX; }
+        if (y>componente.getHeight()-5 || y<0) { y -= incY; incY = -incY; }
     }
 
     // Dibuja en pantalla (objeto Graphics) el modelo de objetos del juego/animación (ejemplo: un texto en las coordenadas)
@@ -114,7 +119,7 @@ public class RefrescoSwingModificado {
         g.setColor( componente.getForeground() );
         // TODO: Dibujado de los elementos de la animación/juego
         // Dibujado de ejemplo:
-        g.drawString("Voooyyy!", x, y);
+        g.drawString("Voooyyy!", (int)x, (int)y);
     }
 
     private void dibujarModeloAImageBuffer() {
@@ -135,9 +140,10 @@ public class RefrescoSwingModificado {
     // Libera el bloqueo para seguir dibujando
     // Lo debe llamar el EDT (Event Dispatch Thread)
     private void resume() {
-        synchronized (bloqueoDibujo) {
-            bloqueoDibujo.notify();
-        }
+        if (pausaEntreFrames>=0)
+	        synchronized (bloqueoDibujo) {
+	            bloqueoDibujo.notify();
+	        }
     }
 
     private void dibuja(Graphics g) {
@@ -147,11 +153,14 @@ public class RefrescoSwingModificado {
         resume();
         if (MUESTRA_FPS) {  // Calcular FPS y sacarlo en pantalla
 	    	if (milis<0) milis = System.currentTimeMillis();  // Tiempo de primer dibujado
-	        numDibujados++;  // Conteo de dibujos
-	        g.drawString( String.format( "FPS: %1$,1.1f", 1000.0*numDibujados/(System.currentTimeMillis()-milis) ), 0, componente.getHeight()-2 );
+	        g.drawString( String.format( "FPS: %1$,1.1f",
+	        		1000.0*numDibujados/(System.currentTimeMillis()-milis) )
+	        	, 0, componente.getHeight()-2 );
         }
     }
 
+    	private long desvTipicaTiempoAcumulada = 0;
+    	private long ultimoDibujado = 0;
     /** Clase interna que redefine un panel que simplemente redibuja un componente con refresco modificado
      */
     @SuppressWarnings("serial")
@@ -159,6 +168,7 @@ public class RefrescoSwingModificado {
         @Override
         protected void paintComponent(Graphics g) {
             RefrescoSwingModificado.this.dibuja( g );
+	        numDibujados++;  // Conteo de dibujos
         }
     }
 
@@ -166,7 +176,8 @@ public class RefrescoSwingModificado {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-            	RefrescoSwingModificado animacion = new RefrescoSwingModificado(0);
+            	RefrescoSwingModificado animacion = new RefrescoSwingModificado(50);  // Probar a cambiar este valor -1, 0, 25, 50
+            		// El FPS mide el número de repaints que se ejecutan... pero no son regulares y afecta a la calidad de vista
 
                 JFrame frame = new JFrame();
                 frame.setTitle("Demostración FPS modificando dibujado Swing");

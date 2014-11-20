@@ -27,7 +27,7 @@ public class PruebaDibujarLinea extends JPanel {
 		JFrame f = new JFrame();
 		f.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
 		f.setSize( 800, 600 );
-		// f.setLocation( new Point(2000,0)); // Cambia la posición de la ventana
+		f.setLocation( new Point(2000,0) ); // Cambia la posición de la ventana
 		f.add( p, BorderLayout.CENTER );
 		f.setVisible( true );
 		Graphics2D g = (Graphics2D) p.getGraphics();
@@ -42,11 +42,15 @@ public class PruebaDibujarLinea extends JPanel {
 		g.setColor( c );
 		g.drawLine( r.nextInt(100), r.nextInt(100), anchura - r.nextInt(100), altura - r.nextInt(100));
 	}
-		
+		int mePintan = 0;
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		dibujarLinea( (Graphics2D) g, Color.red ); // ...Sin embargo, esta no admite dudas!!
+		System.out.println( "Me pintan " + ++mePintan );
+		g.setColor ( Color.red );
+		g.drawLine( 0, 0, 100, 100);
+		Graphics2D g2 = (Graphics2D) g;
+		// dibujarLinea( (Graphics2D) g, Color.red ); // ...Sin embargo, esta no admite dudas!!
 	}
 	
 }

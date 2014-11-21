@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.Random;
-
 import javax.swing.JPanel;
 
 @SuppressWarnings("serial")
@@ -22,18 +21,22 @@ public class PanelDibujoBancoDePruebas extends JPanel {
 	 * @param transp	true para dibujo transparente
 	 */
 	public PanelDibujoBancoDePruebas( int tamHor, int tamVer, boolean transp ) {
-		setOpaque(false);
 		if (transp) {
+			setOpaque(false);
 			imagen = new BufferedImage( tamHor, tamVer, BufferedImage.TYPE_INT_ARGB );
 		} else {
 			imagen = new BufferedImage( tamHor, tamVer, BufferedImage.TYPE_INT_RGB );
-			pintaFondo( Color.white );
+			Graphics2D gr2 = imagen.createGraphics();
+			gr2.setColor( Color.white );
+			gr2.fillRect( 0, 0, tamHor, tamVer );  // Rellenar el fondo
+			setOpaque(true);
+			setBackground( Color.white );
 		}
-		// ((Graphics2D)(imagen.getGraphics())).setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+		g2 = imagen.createGraphics();
+		// g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 	}
 
 	public void pintaFondo( Color cF ) {
-		Graphics2D g2 = getGraphics();
 		g2.setColor( cF );
 		g2.fillRect( 0, 0, getWidth(), getHeight() );  // Rellenar el fondo
 		// g2.fillRect( 0, 0, imagen.getWidth(), imagen.getHeight() );  // Hacerlo así si se quiere ver sólo parte de la imagen pero inicializar toda
@@ -45,12 +48,20 @@ public class PanelDibujoBancoDePruebas extends JPanel {
 	
 	@Override
 	protected void paintComponent(Graphics g) {
+		// super.paintComponent(g);
 		if (imagen!=null) {
-			Graphics2D gr2 = (Graphics2D) g;
-			gr2.drawImage(imagen, 0, 0, null);
+			g.drawImage(imagen, 0, 0, null);
 		}
 	}
 
+//@Override
+//protected void paintComponent(Graphics g) {
+//	super.paintComponent(g);
+//	if (imagen!=null) {
+//		g.drawImage(imagen, 0, 0, null);
+//	}
+//}
+	
 	// *******************************************************************
 	// Datos y métodos de dibujado especializado para el banco de pruebas
 	// *******************************************************************
@@ -78,11 +89,10 @@ public class PanelDibujoBancoDePruebas extends JPanel {
 	int[] filasMarcadas;  // Array de filas marcadas en el dibujo
 	static Stroke stroke1 = new BasicStroke(1);
 	static Stroke stroke3 = new BasicStroke(3);
-	static Stroke stroke5 = new BasicStroke(3);
+	static Stroke stroke5 = new BasicStroke(5);
 	
 	@SuppressWarnings("unchecked")
 	public void iniciarDibujo( int tamMax, String[] nombresPruebas ) {
-		g2 = (Graphics2D) getGraphics();
 		this.nombresPruebas = nombresPruebas;
 		int numProcs = nombresPruebas.length;
 		tiempos = new ArrayList[numProcs]; for (int i=0; i<numProcs; i++) tiempos[i] = new ArrayList<Long>();
@@ -114,7 +124,7 @@ public class PanelDibujoBancoDePruebas extends JPanel {
 	
 	
 	// Se dibuja en orden por tamanyos
-	public void dibujarTiempo( int numProc, int numTam, int tamanyo, long valor ) {
+	public void anyadirYDibujarTiempo( int numProc, int numTam, int tamanyo, long valor ) {
 		if (tamanyos.size() == numTam) tamanyos.add( tamanyo );
 		tiempos[numProc].add( valor );
 		if (valor > maxTiempo) {
@@ -126,7 +136,7 @@ public class PanelDibujoBancoDePruebas extends JPanel {
 	}
 	
 	// Se dibuja en orden por tamanyos
-	public void dibujarEspacio( int numProc, int numTam, int tamanyo, int valor ) {
+	public void anyadirYDibujarEspacio( int numProc, int numTam, int tamanyo, int valor ) {
 		if (tamanyos.size() == numTam) tamanyos.add( tamanyo );
 		espacios[numProc].add( valor );
 		if (valor > maxEspacio) {

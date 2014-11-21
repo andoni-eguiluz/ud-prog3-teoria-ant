@@ -10,7 +10,7 @@ public class AccesoAPersonasHS implements ProcesoProbable {
 	public void init(int tamanyoTest) {
 		l = new HashSet<>();
 		for (int i=0; i<tamanyoTest; i++) {
-			l.add( new Persona( i*2+1, "Nombre " + i, "Apellido " + i ));
+			l.add( new Persona( i*2+1, null, null )); //"Nombre " + i, "Apellido " + i ));
 		}
 	}
 

@@ -1,9 +1,7 @@
 package ud.prog3.cap06.pr0506resuelta;
 
 import java.util.ArrayList;
-
-import javax.swing.SwingUtilities;
-
+import ud.prog3.cap06.pr0506resuelta.Utils;
 import ud.prog3.cap06.pr0506resuelta.gui.VentanaBancoDePruebas;
 
 /** Prueba combinada de distintas estructuras de datos y distintos tamaños

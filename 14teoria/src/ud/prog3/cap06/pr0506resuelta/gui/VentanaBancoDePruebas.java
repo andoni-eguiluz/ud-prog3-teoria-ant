@@ -1,5 +1,7 @@
 package ud.prog3.cap06.pr0506resuelta.gui;
 
+import ud.prog3.cap06.pr0506resuelta.*;
+
 import javax.swing.*;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -8,25 +10,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
-import ud.prog3.cap06.pr0506resuelta.*;
-
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
-import java.lang.reflect.InvocationTargetException;
+import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Set;
 
 @SuppressWarnings("serial")
 public class VentanaBancoDePruebas extends JFrame {
@@ -44,7 +30,7 @@ public class VentanaBancoDePruebas extends JFrame {
 	// Componentes de visualización
 	private JTable tDatos = new JTable();
 	private JTree tArbol = new JTree(new Object[0]);
-	private PanelDibujoBancoDePruebas pDibujo = new PanelDibujoBancoDePruebas( 3000, 2000, true );
+	private PanelDibujoBancoDePruebas pDibujo = new PanelDibujoBancoDePruebas( 3000, 2000, false );
 	// Contenedores manejables de la ventana
 	private JPanel pConfig = new JPanel();
 	// Hilo de cálculo
@@ -65,6 +51,7 @@ public class VentanaBancoDePruebas extends JFrame {
 			@Override
 			public Component getTableCellRendererComponent(JTable table, Object value, 
 					boolean isSelected, boolean hasFocus, int row, int column) {
+				// System.out.println( "GetRenderer " + row + ", " + column );
 				Component def = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 				if (column==0) {
 					def.setForeground( pDibujo.getColor(row % procs.size()) ); 
@@ -112,6 +99,7 @@ public class VentanaBancoDePruebas extends JFrame {
 			@Override
 			public void componentResized(ComponentEvent e) {
 				pDibujo.reiniciarDibujo();
+				pDibujo.getParent().repaint();
 			}
 		});
 		tDatos.getSelectionModel().addListSelectionListener( new ListSelectionListener() {
@@ -119,6 +107,7 @@ public class VentanaBancoDePruebas extends JFrame {
 			public void valueChanged(ListSelectionEvent e) {
 				if (!e.getValueIsAdjusting()) {
 					pDibujo.marcaLineas( tDatos.getSelectedRows() );
+					pDibujo.getParent().repaint();
 				}
 			}
 		});
@@ -162,8 +151,10 @@ public class VentanaBancoDePruebas extends JFrame {
 				else if (pulsadoCtrl) {
 					if (e.getKeyCode()==KeyEvent.VK_PLUS) {
 						pDibujo.cambiarZoom( true );
+						pDibujo.getParent().repaint();
 					} else if (e.getKeyCode()==KeyEvent.VK_MINUS) {
 						pDibujo.cambiarZoom( false );
+						pDibujo.getParent().repaint();
 					}
 				}
 			}
@@ -230,9 +221,9 @@ public class VentanaBancoDePruebas extends JFrame {
 				dtm.setValueAt( tiempo, prueba, numTam+1 );
 				dtm.setValueAt( espacio/1024+"k", prueba+procs.size(), numTam+1 );
 				// Añadir dato a dibujo
-				pDibujo.dibujarTiempo( prueba, numTam, tamanyo, tiempo );
-				pDibujo.dibujarEspacio( prueba, numTam, tamanyo, espacio );
-				pDibujo.repaint();
+				pDibujo.anyadirYDibujarTiempo( prueba, numTam, tamanyo, tiempo );
+				pDibujo.anyadirYDibujarEspacio( prueba, numTam, tamanyo, espacio );
+				pDibujo.getParent().repaint();
 				// Cancelar el hilo si se interrumpe desde fuera
 				if (Thread.interrupted()) return;  
 			}
@@ -248,6 +239,7 @@ public class VentanaBancoDePruebas extends JFrame {
 
 // Prueba de nuevo DefaultTableModel
 
+@SuppressWarnings("serial")
 class MiDTM extends DefaultTableModel {
 	public MiDTM( Object[] aObjetos, int numFilas ) {
 		super( aObjetos, numFilas );
@@ -255,8 +247,9 @@ class MiDTM extends DefaultTableModel {
 
 	@Override
 	public boolean isCellEditable(int row, int column) {
-		if (column==0) return false;
-		return true;
+		return false;
+//		if (column==0) return false;
+//		return true;
 	}
 	
 }

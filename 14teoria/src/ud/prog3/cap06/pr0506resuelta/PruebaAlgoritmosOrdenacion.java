@@ -200,6 +200,7 @@ public class PruebaAlgoritmosOrdenacion {
 			
 			private static PrintStream salida = System.out;
 			// Auxiliares para ver quickSort lo que hace
+			@SuppressWarnings("unused")
 			private static void visuProgresoQS( int[] l, int marca, int marcaInt, int desde, int hasta, String mens ) {
 					salida.print( "   [ ");
 					for (int i=0; i<l.length; i++) {
@@ -218,6 +219,7 @@ public class PruebaAlgoritmosOrdenacion {
 						salida.print( "** " );
 					salida.println("]  " + mens);
 			}
+			@SuppressWarnings("unused")
 			private static void visuProgresoQSParcial( int[] l, int marca, int marcaInt, int desde, int hasta, String mens ) {
 				salida.print( "   " + desde + " a " + hasta + ": [ ");
 				boolean recien = false;
@@ -242,18 +244,21 @@ public class PruebaAlgoritmosOrdenacion {
 	}
 	
 	// Utilidades 
+	@SuppressWarnings("unused")
 	private static void showArray( int[] v ) {
 		System.out.print( "[ " );
 		for (int i=0; i<v.length; i++) { System.out.print( v[i] + " " ); if (i%100==0) {System.out.println(); System.out.print( "  " ); }}
 		System.out.println( "]" );
 	}
 	
+	@SuppressWarnings("unused")
 	private static void showArray( int[] v, int desde, int hasta ) {
 		System.out.print( " -> " + desde + " a " + hasta +": [ " );
 		for (int i=desde; i<=hasta; i++) { System.out.print( v[i] + " " ); if (i%100==0) {System.out.println(); System.out.print( "  " ); }}
 		System.out.println( "]" );
 	}
 	
+	@SuppressWarnings("unused")
 	private static int mediana( int[] v, int desde, int hasta ) {
 		if (desde>=hasta-1) return desde;    // No hay intermedios
 		int menor = desde; int mayor = hasta;

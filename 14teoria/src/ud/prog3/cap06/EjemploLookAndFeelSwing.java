@@ -7,8 +7,6 @@ import javax.swing.plaf.metal.*;
 import java.awt.*; 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseAdapter;
 import java.util.Arrays;
 
 /** Ejemplo de ventanas en Swing que incluye:
@@ -39,12 +37,12 @@ public class EjemploLookAndFeelSwing {
 	 * @param font	Font a poner por defecto
 	 */
 	public static void cambiarFontUI(javax.swing.plaf.FontUIResource font){
-		java.util.Enumeration keys = UIManager.getDefaults().keys();
+		java.util.Enumeration<Object> keys = UIManager.getDefaults().keys();
 		while (keys.hasMoreElements()) {
 			Object key = keys.nextElement();
 			Object value = UIManager.get (key);
 			if (value instanceof javax.swing.plaf.FontUIResource) {
-				UIManager.put (key, font);
+				UIManager.put( key, font );
 			}
 			System.out.println( key + "\t" + ((value==null)?"NULO":value.getClass().toString()) );
 		}

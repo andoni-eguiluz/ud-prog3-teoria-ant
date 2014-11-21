@@ -26,11 +26,6 @@ public class PruebaDibujadoSwing {
 		}
         JFrame f = new JFrame("Prueba de dibujado de Swing");
         
-        Object[] opciones = {"Sí", "No", "Cancelar" };
-        // JOptionPane.showOptionDialog( f, "¿Confirmar?", "Prueba de JOptionPane", 
-        // 		JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null, opciones, opciones[0]);
-        // JOptionPane.showInputDialog( f,
-        // 		"Introduce opinión", "Prueba 2 de JOptionPane", JOptionPane.QUESTION_MESSAGE );
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); 
         f.add(mp);
         f.setSize(350,200);

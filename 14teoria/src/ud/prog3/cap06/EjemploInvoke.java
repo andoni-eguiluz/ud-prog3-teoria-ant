@@ -22,6 +22,7 @@ import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
+@SuppressWarnings("serial")
 public class EjemploInvoke extends JFrame implements ActionListener
 {
 	private final JPanel contentPane, panelDerecho;
@@ -98,7 +99,7 @@ public class EjemploInvoke extends JFrame implements ActionListener
 		panelIzquierdo.add(scrollPaneListaNiveles, gbc_scrollPaneListaNiveles);
 
 		String [] niveles = new String [] {"  Nivel 1", "  Nivel 2", "  Nivel 3", "  Nivel 4", "  Nivel 5", "  Nivel 6", "  Nivel 7", "  Nivel 8"};
-		JList listaNiveles = new JList(niveles);
+		JList<String> listaNiveles = new JList<String>(niveles);
 		listaNiveles.setCursor(Cursor.getPredefinedCursor(Cursor.HAND_CURSOR));
 		listaNiveles.setForeground(Color.BLACK);
 		listaNiveles.setFont(new Font("Serif", Font.PLAIN, 20));

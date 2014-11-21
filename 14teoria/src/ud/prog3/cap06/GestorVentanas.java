@@ -1,6 +1,7 @@
 package ud.prog3.cap06;
 
 import java.util.ArrayList;
+
 import javax.swing.JFrame;
 
 /** Clase para gestionar visibilización de ventanas de forma global.
@@ -50,7 +51,7 @@ public class GestorVentanas {
 	 * @param ocultarElResto	Si true, oculta el resto. Si no, las deja como estuvieran
 	 * @param numDeVentana	Si hay más de una ventana de la misma clase, índice de la ventana a visibilizar
 	 */
-	public static void hacerVisible(Class ventanaAVisibilizar, boolean ocultarElResto, int numDeVentana ) {
+	public static void hacerVisible(Class<?> ventanaAVisibilizar, boolean ocultarElResto, int numDeVentana ) {
 		for (JFrame vent : listaVentanas) {
 			if (vent.getClass().isAssignableFrom( ventanaAVisibilizar )) {
 				// Si la clase de la ventana es igual o descendiente de la indicada
@@ -75,7 +76,7 @@ public class GestorVentanas {
 	 * @param ventanaAOcultar	Clase de la ventana a hacer visible
 	 * @param numDeVentana	Si hay más de una ventana de la misma clase, índice de la ventana a ocultar
 	 */
-	public static void ocultar(Class ventanaAVisibilizar, int numDeVentana ) {
+	public static void ocultar(Class<?> ventanaAVisibilizar, int numDeVentana ) {
 		for (JFrame vent : listaVentanas) {
 			if (vent.getClass().isAssignableFrom( ventanaAVisibilizar )) {
 				// Si la clase de la ventana es igual o descendiente de la indicada
@@ -120,6 +121,7 @@ public class GestorVentanas {
 
 /* Ejemplos de ventanas para la prueba */
 
+@SuppressWarnings("serial")
 class VentanaPrincipal extends JFrame {
 	public VentanaPrincipal() {
 		setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
@@ -128,6 +130,7 @@ class VentanaPrincipal extends JFrame {
 		setLocationRelativeTo(null);
 	}
 }
+@SuppressWarnings("serial")
 class VentanaCreditos  extends JFrame {
 	public VentanaCreditos() {
 		setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
@@ -135,6 +138,7 @@ class VentanaCreditos  extends JFrame {
 		setSize( 400, 300 );
 	}
 }
+@SuppressWarnings("serial")
 class VentanaOpciones  extends JFrame {
 	public VentanaOpciones() {
 		setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
@@ -143,6 +147,7 @@ class VentanaOpciones  extends JFrame {
 		setLocationRelativeTo(null);
 	}
 }
+@SuppressWarnings("serial")
 class VentanaSeleccion extends JFrame {
 	static int x = 100;
 	static int y = 100;

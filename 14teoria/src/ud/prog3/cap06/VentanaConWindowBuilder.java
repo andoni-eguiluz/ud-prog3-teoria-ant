@@ -14,6 +14,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
+@SuppressWarnings("serial")
 public class VentanaConWindowBuilder extends JFrame {
 
 	private JPanel contentPane;

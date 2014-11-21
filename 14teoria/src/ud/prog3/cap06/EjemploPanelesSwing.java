@@ -2,16 +2,10 @@ package ud.prog3.cap06;
 import javax.swing.*;
 import javax.swing.border.BevelBorder;
 import javax.swing.border.Border;
-import javax.swing.plaf.metal.*;
 
 import java.awt.*; 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
-import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
-import java.util.Arrays;
 
 /** Ejemplo de todos los paneles de una ventana swing
  * @author andoni

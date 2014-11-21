@@ -6,24 +6,20 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSlider;
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /** 
  * Ejemplo de JTable con modelo de datos propio
  */
+@SuppressWarnings("serial")
 public class MiJTable extends JTable {
 
 	// Modelo de datos propio
@@ -256,7 +252,7 @@ class MiTableModel extends AbstractTableModel {
      * este método la última columna se vería como un String en lugar
      * de un checkbox (renderer/editor por defecto para Boolean)
      */
-    public Class getColumnClass(int c) {
+    public Class<?> getColumnClass(int c) {
     	if (datos.size()==0) return String.class;  // por defecto String
         return datos.get(0).getValor(c).getClass();  // Si hay datos, la clase correspondiente
     }

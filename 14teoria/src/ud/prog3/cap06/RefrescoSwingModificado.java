@@ -169,7 +169,7 @@ public class RefrescoSwingModificado {
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
-            	RefrescoSwingModificado animacion = new RefrescoSwingModificado(50);  // Probar a cambiar este valor -1, 0, 25, 50
+            	RefrescoSwingModificado animacion = new RefrescoSwingModificado(0);  // Probar a cambiar este valor -1, 0, 25, 50
             		// El FPS mide el número de repaints que se ejecutan... pero no son regulares y afecta a la calidad de vista
 
                 JFrame frame = new JFrame();

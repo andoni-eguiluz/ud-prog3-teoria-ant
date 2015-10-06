@@ -2,130 +2,130 @@
 <!DOCTYPE log SYSTEM "logger.dtd">
 <log>
 <record>
-  <date>2014-09-19T12:21:48</date>
-  <millis>1411122108142</millis>
+  <date>2015-09-21T11:30:37</date>
+  <millis>1442827837223</millis>
   <sequence>0</sequence>
-  <logger>cap01.EjemploLogger</logger>
+  <logger>ud.prog3.cap01.EjemploLogger</logger>
   <level>INFO</level>
-  <class>cap01.EjemploLogger</class>
+  <class>ud.prog3.cap01.EjemploLogger</class>
   <method>main</method>
   <thread>1</thread>
   <message>Empezando</message>
 </record>
 <record>
-  <date>2014-09-19T12:21:48</date>
-  <millis>1411122108187</millis>
+  <date>2015-09-21T11:30:37</date>
+  <millis>1442827837272</millis>
   <sequence>1</sequence>
-  <logger>cap01.EjemploLogger</logger>
+  <logger>ud.prog3.cap01.EjemploLogger</logger>
   <level>FINER</level>
-  <class>cap01.EjemploLogger</class>
+  <class>ud.prog3.cap01.EjemploLogger</class>
   <method>main</method>
   <thread>1</thread>
   <message>proceso bucle j = 7</message>
 </record>
 <record>
-  <date>2014-09-19T12:21:48</date>
-  <millis>1411122108190</millis>
+  <date>2015-09-21T11:30:37</date>
+  <millis>1442827837275</millis>
   <sequence>2</sequence>
-  <logger>cap01.EjemploLogger</logger>
+  <logger>ud.prog3.cap01.EjemploLogger</logger>
   <level>FINER</level>
-  <class>cap01.EjemploLogger</class>
+  <class>ud.prog3.cap01.EjemploLogger</class>
   <method>main</method>
   <thread>1</thread>
   <message>proceso bucle j = 6</message>
 </record>
 <record>
-  <date>2014-09-19T12:21:48</date>
-  <millis>1411122108191</millis>
+  <date>2015-09-21T11:30:37</date>
+  <millis>1442827837276</millis>
   <sequence>3</sequence>
-  <logger>cap01.EjemploLogger</logger>
+  <logger>ud.prog3.cap01.EjemploLogger</logger>
   <level>FINER</level>
-  <class>cap01.EjemploLogger</class>
+  <class>ud.prog3.cap01.EjemploLogger</class>
   <method>main</method>
   <thread>1</thread>
   <message>proceso bucle j = 5</message>
 </record>
 <record>
-  <date>2014-09-19T12:21:48</date>
-  <millis>1411122108192</millis>
+  <date>2015-09-21T11:30:37</date>
+  <millis>1442827837276</millis>
   <sequence>4</sequence>
-  <logger>cap01.EjemploLogger</logger>
+  <logger>ud.prog3.cap01.EjemploLogger</logger>
   <level>FINER</level>
-  <class>cap01.EjemploLogger</class>
+  <class>ud.prog3.cap01.EjemploLogger</class>
   <method>main</method>
   <thread>1</thread>
   <message>proceso bucle j = 4</message>
 </record>
 <record>
-  <date>2014-09-19T12:21:48</date>
-  <millis>1411122108192</millis>
+  <date>2015-09-21T11:30:37</date>
+  <millis>1442827837277</millis>
   <sequence>5</sequence>
-  <logger>cap01.EjemploLogger</logger>
+  <logger>ud.prog3.cap01.EjemploLogger</logger>
   <level>FINER</level>
-  <class>cap01.EjemploLogger</class>
+  <class>ud.prog3.cap01.EjemploLogger</class>
   <method>main</method>
   <thread>1</thread>
   <message>proceso bucle j = 3</message>
 </record>
 <record>
-  <date>2014-09-19T12:21:48</date>
-  <millis>1411122108193</millis>
+  <date>2015-09-21T11:30:37</date>
+  <millis>1442827837278</millis>
   <sequence>6</sequence>
-  <logger>cap01.EjemploLogger</logger>
+  <logger>ud.prog3.cap01.EjemploLogger</logger>
   <level>FINER</level>
-  <class>cap01.EjemploLogger</class>
+  <class>ud.prog3.cap01.EjemploLogger</class>
   <method>main</method>
   <thread>1</thread>
   <message>proceso bucle j = 2</message>
 </record>
 <record>
-  <date>2014-09-19T12:21:48</date>
-  <millis>1411122108194</millis>
+  <date>2015-09-21T11:30:37</date>
+  <millis>1442827837279</millis>
   <sequence>7</sequence>
-  <logger>cap01.EjemploLogger</logger>
+  <logger>ud.prog3.cap01.EjemploLogger</logger>
   <level>FINER</level>
-  <class>cap01.EjemploLogger</class>
+  <class>ud.prog3.cap01.EjemploLogger</class>
   <method>main</method>
   <thread>1</thread>
   <message>proceso bucle j = 1</message>
 </record>
 <record>
-  <date>2014-09-19T12:21:48</date>
-  <millis>1411122108195</millis>
+  <date>2015-09-21T11:30:37</date>
+  <millis>1442827837280</millis>
   <sequence>8</sequence>
-  <logger>cap01.EjemploLogger</logger>
+  <logger>ud.prog3.cap01.EjemploLogger</logger>
   <level>FINER</level>
-  <class>cap01.EjemploLogger</class>
+  <class>ud.prog3.cap01.EjemploLogger</class>
   <method>main</method>
   <thread>1</thread>
   <message>proceso bucle j = 0</message>
 </record>
 <record>
-  <date>2014-09-19T12:21:48</date>
-  <millis>1411122108196</millis>
+  <date>2015-09-21T11:30:37</date>
+  <millis>1442827837280</millis>
   <sequence>9</sequence>
-  <logger>cap01.EjemploLogger</logger>
+  <logger>ud.prog3.cap01.EjemploLogger</logger>
   <level>SEVERE</level>
-  <class>cap01.EjemploLogger</class>
+  <class>ud.prog3.cap01.EjemploLogger</class>
   <method>main</method>
   <thread>1</thread>
   <message>error de cálculo</message>
   <exception>
     <message>java.lang.ArithmeticException: / by zero</message>
     <frame>
-      <class>cap01.EjemploLogger</class>
+      <class>ud.prog3.cap01.EjemploLogger</class>
       <method>main</method>
       <line>30</line>
     </frame>
   </exception>
 </record>
 <record>
-  <date>2014-09-19T12:21:48</date>
-  <millis>1411122108198</millis>
+  <date>2015-09-21T11:30:37</date>
+  <millis>1442827837282</millis>
   <sequence>10</sequence>
-  <logger>cap01.EjemploLogger</logger>
+  <logger>ud.prog3.cap01.EjemploLogger</logger>
   <level>INFO</level>
-  <class>cap01.EjemploLogger</class>
+  <class>ud.prog3.cap01.EjemploLogger</class>
   <method>main</method>
   <thread>1</thread>
   <message>Se acabó</message>

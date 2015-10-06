@@ -11,8 +11,10 @@ public class EjemploZip {
 
 	public static void main(String[] args) {
 		// File dirActual = new File( System.getProperty("user.dir") );
+		String paquete = EjemploZip.class.getPackage().getName();
+		System.out.println( paquete );
 		File dirActual = new File( System.getProperty("user.dir") + "/src/" + 
-				EjemploZip.class.getPackage().getName() + "/" );
+				 paquete.replaceAll( "\\.", "/" ) + "/" );
 		System.out.println("Directorio de trabajo: " + dirActual );
 		System.out.println( "Ficheros en esta carpeta: ");
 		File[] fics = dirActual.listFiles();

@@ -49,7 +49,7 @@ public class EjemploVLCJ extends JFrame {
 		System.setProperty("jna.library.path", "c:\\Archivos de programa\\videolan\\vlc-2.1.5");
 		miVentana = new EjemploVLCJ();
 		miVentana.lanza(
-				"D:\\media\\videos\\AOrdenar\\Somebody_That_I_Used_To_Know_-_Pentatonix_Gotye_cover (2).mp4"
+				"D:\\media\\videos\\AOrdenar\\Musica\\Somebody_That_I_Used_To_Know_-_Pentatonix_Gotye_cover (2).mp4"
 				);
 	}
 	

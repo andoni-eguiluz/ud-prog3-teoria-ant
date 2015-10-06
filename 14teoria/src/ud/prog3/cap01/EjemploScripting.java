@@ -10,10 +10,10 @@ public class EjemploScripting {
 		ScriptEngineManager factory = new ScriptEngineManager();
 		// Crea un intérprete JavaScript
 		ScriptEngine engine = factory.getEngineByName( "JavaScript" );
-		// Evalúa código JavaScript
-		engine.eval( "print('Hello, World')" );
-		// Evalúa código JavaScript incorrecto
 		try {
+			// Evalúa código JavaScript
+			engine.eval( "print('Hello, World')" );
+			// Evalúa código JavaScript incorrecto
 			engine.eval( "print(Hello, World')" );
 		} catch (ScriptException e) {
 			System.out.println( "Error de ejecución de script: " + e.getMessage() );
@@ -29,7 +29,7 @@ public class EjemploScripting {
 		        engName, engVersion);
 		    List<String> engNames = fact.getNames();
 		    for(String name: engNames) {
-		      System.out.printf("\tEngine Alias: %s\n", name);
+		      System.out.printf("\t\tEngine Alias: %s\n", name);
 		    }
 		    System.out.printf("\tLanguage: %s (%s)\n", 
 		        langName, langVersion);

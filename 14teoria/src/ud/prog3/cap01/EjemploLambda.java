@@ -19,7 +19,7 @@ public class EjemploLambda {
 		listaMm.add( new Multimedia( "Happy", "mp3", 0.8f, Multimedia.Tipo.AUDIO ) );
 		listaMm.add( new Multimedia( "Royals", "mp4", 9.4f, Multimedia.Tipo.VIDEO ) );
 		//
-		int prueba = 3;  // Ir cambiando para probar distintas cosas
+		int prueba = 4;  // Ir cambiando para probar distintas cosas
 		// 1. Prueba normal
 		if (prueba==1) sacaLosVideos( listaMm );
 		// ¿Y si queremos sacar los vídeos entre 5 y 10 Mb? 
@@ -87,15 +87,15 @@ public class EjemploLambda {
 			bot1.addActionListener( new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					System.out.println( "Botón pulsado");
-					System.out.println( "Fuente: " + e.getSource());
+					System.out.println( "Botón pulsado" );
+					System.out.println( "Fuente: " + e.getSource() );
 				}
 			});
 			// se puede hacer con expresión lambda:
 			bot1.addActionListener( 
 				e -> {
-					System.out.println( "Botón pulsado");
-					System.out.println( "Fuente: " + e.getSource());
+					System.out.println( "Botón pulsado" );
+					System.out.println( "Fuente: " + e.getSource() );
 				}
 			);
 	}

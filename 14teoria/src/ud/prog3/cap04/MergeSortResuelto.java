@@ -10,6 +10,7 @@ public class MergeSortResuelto {
 	 * @param fin	Posición final de la ordenación (inclusive)
 	 */
 	public static void mergeSort( int[] nums, int ini, int fin ) {
+		System.out.println( "Entrando en merge: " + ini + "," + fin );
 		if (ini>=fin) {
 			return;  // Caso base, nada que ordenar
 		} else {

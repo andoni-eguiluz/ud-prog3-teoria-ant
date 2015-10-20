@@ -1,6 +1,7 @@
 package ud.prog3.cap05;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 
 public class CopiaProfundaArrayList {
@@ -22,7 +23,7 @@ public class CopiaProfundaArrayList {
 		lPers.add( new Persona( 16056077, 'H', "Harry", "Potter" ) );
 		lPers.add( new Persona(   666666, 'R', "Tom", "Riddle" ) );
 		lPers.add( new Persona( 42455913, 'A', "Alfredo", "Pótter" ) );
-		lPers.sort( new Comparator<Persona>() {
+		Collections.sort( lPers, new Comparator<Persona>() {  // En java 8 tb se podría directamente en el AL lPers.sort( ... )
 				@Override
 				public int compare(Persona p1, Persona p2) {
 					return p1.dni - p2.dni;  // - si p1<p2, + si p1>p2, = si iguales
@@ -31,7 +32,7 @@ public class CopiaProfundaArrayList {
 		System.out.println( "Personas ordenadas por DNI: " );
 		System.out.println( " " + lPers );
 		ArrayList<Persona> lPers2 = (ArrayList<Persona>) lPers.clone();
-		lPers2.sort( new Comparator<Persona>() {
+		Collections.sort( lPers2, new Comparator<Persona>() {
 			@Override
 			public int compare(Persona p1, Persona p2) {
 				return (p1.apellidos+", "+p1.nombre).compareTo( 
@@ -46,7 +47,7 @@ public class CopiaProfundaArrayList {
 			p.nombre = p.nombre.replaceAll( "ó", "o" ).toUpperCase();
 			//  TODO: Se haría lo mismo con ñs y el resto de tildes
 		}
-		lPers2.sort( new Comparator<Persona>() {
+		Collections.sort( lPers2, new Comparator<Persona>() {
 			@Override
 			public int compare(Persona p1, Persona p2) {
 				return (p1.apellidos+", "+p1.nombre).compareTo( 

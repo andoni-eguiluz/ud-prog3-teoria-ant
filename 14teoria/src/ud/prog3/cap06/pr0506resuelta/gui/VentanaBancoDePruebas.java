@@ -173,6 +173,7 @@ public class VentanaBancoDePruebas extends JFrame {
 		this.procs = procs;
 	}
 	
+		private DefaultTableModel dtm;
 	private void calcular() {
 		if (procs==null) return;
 		objetosPrueba = new ArrayList<Object>();
@@ -190,7 +191,7 @@ public class VentanaBancoDePruebas extends JFrame {
 		pDibujo.iniciarDibujo( tamMax, nombresPruebas );
 		int numTam = 0;
 		// Crear tabla inicial de JTable (primera columna)
-			DefaultTableModel dtm = new MiDTM( new Object[] { "Prueba" }, 0 );
+			dtm = new MiDTM( new Object[] { "Prueba" }, 0 );
 			for (int fila=0; fila<procs.size(); fila++) dtm.addRow( new Object[] { "t. " + nombresPruebas[fila] } );
 			for (int fila=0; fila<procs.size(); fila++) dtm.addRow( new Object[] { "esp. " + nombresPruebas[fila] } );
 			tDatos.setModel( dtm );

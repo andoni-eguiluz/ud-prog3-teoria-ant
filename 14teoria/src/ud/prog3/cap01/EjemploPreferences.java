@@ -14,8 +14,8 @@ public class EjemploPreferences {
 	
 	// Prueba de preferencias
 	public static void main(String[] args) {
-		String pref = "PRUEBA";
-		String valor = "1024,768";
+		String pref = "test";
+		String valor = "hola";
 		System.out.println( "Valor de la preferencia " + pref +
 				": " + prefs.get( pref, "NO EXISTE" ));
 		System.out.println( "Cambiamos la preferencia a: " + valor );
@@ -30,6 +30,8 @@ public class EjemploPreferences {
 		
 		// En windows
 		// regedit
+		// Clave en:
+		// Equipo/HKEY_CURRENT_USER/SOFTWARE/JavaSoft/Prefs/ud/prog3/cap01
 	}
 
 }

@@ -105,7 +105,7 @@ public class AlgoritmosListas {
 		}
 	}
 
-	// Pre: desde>=0  +  desde>=l.size()  +  hasta<l.size()
+	// Pre: desde>=0  +  desde<=l.size()  +  hasta<l.size()
 	// Pre: l está ordenada
 	static void addEnOrden( List l, Comparable valor, int desde, int hasta ) {
 		if (desde>=hasta) {  // Desde>hasta contempla el caso de lista vacía inicial

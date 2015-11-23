@@ -32,8 +32,8 @@ public class BST<T extends Comparable<T>> {
 			}
 		}
 		
-	public void recorrerInOrden( BST bst, Consumer<T> c ) {
-		recorrerIOrec( bst.raiz, c );
+	public void recorrerInOrden( Consumer<T> c ) {
+		recorrerIOrec( raiz, c );
 	}
 		private void recorrerIOrec( NodoBST<T> nodo, Consumer<T> c ) {
 			if (nodo!=null) {   // Si no caso base
@@ -88,6 +88,16 @@ public class BST<T extends Comparable<T>> {
 				return 1 + Math.max( alturaRec( bst.izquierdo ), alturaRec( bst.derecho ) );
 			}
 		}
+		
+	public int size() {
+		return sizeRec( raiz );
+	}
+		private int sizeRec( NodoBST<T> nodo ) {
+			if (nodo==null)
+				return 0;
+			else
+				return 1 + sizeRec( nodo.izquierdo ) + sizeRec( nodo.derecho );
+		}
 	
 	public static void main(String[] args) {
 		BST<Integer> bst = new BST<>();
@@ -99,9 +109,9 @@ public class BST<T extends Comparable<T>> {
 		bst.insertar( 4 );
 		bst.insertar( 6 );
 		System.out.print( "Recorrido árbol inorden = { ");
-		bst.recorrerInOrden( bst, (Integer i) -> { System.out.print( i + " " ); } );
+		bst.recorrerInOrden( (Integer i) -> { System.out.print( i + " " ); } );
 		// O en sintaxis Java 7
-		// bst.recorrerInOrden( bst, new Consumer<Integer>() {
+		// bst.recorrerInOrden( new Consumer<Integer>() {
 		// 	@Override
 		// 	public void accept(Integer t) {
 		// 		System.out.print( t + " " );

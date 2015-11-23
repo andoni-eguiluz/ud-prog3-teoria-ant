@@ -205,15 +205,15 @@ public class PruebasVariasSwing {
 			// Decoración JFrame y JInternalFrame
 		pruebaDecoraciones();
 			// Fondo de pantalla con un gráfico
-		// pruebaVentanaConGraficoDeFondo();  // ver clase JPanelConFondo
+		pruebaVentanaConGraficoDeFondo();  // ver clase JPanelConFondo
 			// Centrado vertical con GridLayout y con GridBagLayout
-		// pruebaCentradoVertical();
+		pruebaCentradoVertical();
 			// Prueba de tiempo que tarda una ventana y tiempo que tarda Font
-		// pruebaTiempoDeFont();
+		pruebaTiempoDeFont();
 			// Prueba de consultor de contenedor principal
-		// pruebaConsultorContenedorPrincipal();
+		pruebaConsultorContenedorPrincipal();
 			// Prueba de text field con entrada limitada
-		// pruebaLimitarJTextField();
+		pruebaLimitarJTextField();
 	}
 }
 

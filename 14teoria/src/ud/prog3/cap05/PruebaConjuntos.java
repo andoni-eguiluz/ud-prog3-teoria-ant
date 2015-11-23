@@ -109,6 +109,6 @@ class NoOrdenada
 	public int compareTo(NoOrdenada o) {
 		// Observa que si la comparación está mal el set no funciona:
 		return nick.compareTo(o.nick);
-		//return 0;
+		// return 0;
 	}
 }

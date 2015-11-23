@@ -168,6 +168,6 @@ public class EjemploInvoke extends JFrame implements ActionListener
 				}
 			} );
 		}
-			
+		Utils.muestraThreadsActivos();	
 	}
 }

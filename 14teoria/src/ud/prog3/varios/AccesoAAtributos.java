@@ -54,7 +54,7 @@ public class AccesoAAtributos {
 	
 	/** Calcula un string para visualización de atributos (y sus valores, y sus tamaños en memoria) del objeto indicado
 	 * @param mens	Mensaje inicial que se muestra en consola en la primera línea
-	 * @param mens	Separador (de tabulación) que se usa en cada línea de atributo
+	 * @param sep	Separador (de tabulación) que se usa en cada línea de atributo
 	 * @param o	Objeto que se quiere analizar
 	 * @param tbStatic	true si se quieren visualizar también los atributos estáticos
 	 * @param mostrarTam true si se quiere mostrar el tamaño ocupado por el objeto y sus atributos
@@ -83,7 +83,7 @@ public class AccesoAAtributos {
 	/** Devuelve un despliegue de los atributos (y sus valores, y sus tamaños en memoria) de un objeto,
 	 * explorando en profundidad todos los objetos contenidos en él.
 	 * @param mens	Mensaje inicial que se muestra en consola en la primera línea
-	 * @param mens	Separador (de tabulación) que se usa en cada línea de atributo
+	 * @param sep	Separador (de tabulación) que se usa en cada línea de atributo
 	 * @param o	Objeto que se quiere analizar
 	 * @param tbStatic	true si se quieren visualizar también los atributos estáticos
 	 * @param mostrarTam true si se quiere mostrar el tamaño ocupado por el objeto y sus atributos

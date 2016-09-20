@@ -72,15 +72,14 @@ public class EjemploLambda {
 		// 5. Usando interfaces funcionales predefinidos:
 		if (prueba==5) {
 			consumeLosQueCumplan( listaMm, 
-				m -> m.tipo==Multimedia.Tipo.VIDEO
-					 && m.megas>=5 && m.megas<=10,
+				m -> m.tipo==Multimedia.Tipo.VIDEO && m.megas>=5 && m.megas<=10,
 				m -> System.out.println( m )
 			);
 		}
 		
 
 		// Qué interfaces conocemos con un sólo método?  
-		// Esos permiten notación lambda.
+		// Todos esos permiten notación lambda.
 		// Por ejemplo ActionListener:
 		JButton bot1 = new JButton();
 			// Lo tradicional...
@@ -157,3 +156,14 @@ interface TestMultimedia {
 	 */
 	boolean test( Multimedia m );
 }
+
+
+//
+// Interfaces predefinidos clásicos para notación lambda:  
+// (excepto Runnable, todos en java.util.function)
+//
+// Runnable --> run()
+// Consumer<T> --> void accept(T)
+// Predicate<T> --> boolean test(T)
+// Supplier<T> --> T get()
+// Function<T,R> --> R apply(T)

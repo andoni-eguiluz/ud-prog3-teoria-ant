@@ -5,6 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 
 import uk.co.caprica.vlcj.component.EmbeddedMediaPlayerComponent;
+import uk.co.caprica.vlcj.discovery.NativeDiscovery;
 
 public class EjemploVLCJ extends JFrame {
 	private static final long serialVersionUID = 1L;
@@ -42,11 +43,13 @@ public class EjemploVLCJ extends JFrame {
 	}
 
 	private void lanza(String mrl) {
+		mediaPlayerComponent.getMediaPlayer().setVolume( 100 );
 		mediaPlayerComponent.getMediaPlayer().playMedia(mrl);
 	}
 
 	public static void main(String[] args) {
-		System.setProperty("jna.library.path", "c:\\Archivos de programa\\videolan\\vlc-2.1.5");
+		boolean found = new NativeDiscovery().discover();
+    	if (!found) System.setProperty("jna.library.path", "c:\\Archivos de programa\\videolan\\vlc-2.1.5");
 		miVentana = new EjemploVLCJ();
 		miVentana.lanza(
 				"D:\\media\\videos\\AOrdenar\\Musica\\Somebody_That_I_Used_To_Know_-_Pentatonix_Gotye_cover (2).mp4"

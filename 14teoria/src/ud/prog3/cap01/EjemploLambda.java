@@ -7,6 +7,7 @@ import java.util.function.Consumer;
 import java.util.function.Predicate;
 
 import javax.swing.JButton;
+import javax.swing.SwingUtilities;
 
 public class EjemploLambda {
 
@@ -97,6 +98,10 @@ public class EjemploLambda {
 					System.out.println( "Fuente: " + e.getSource() );
 				}
 			);
+			
+		// Otro ejemplo: Runnable (sin parámetros)
+		SwingUtilities.invokeLater( () -> { /* Cosas de ventanas */ } );
+		
 	}
 	
 	static void sacaLosVideos( ArrayList<Multimedia> lista ) {

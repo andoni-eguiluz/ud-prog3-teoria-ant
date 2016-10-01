@@ -17,7 +17,7 @@ public class EjemploFechas  {
 		Date d2 = new Date( Long.MAX_VALUE );
 		System.out.println( "Max día = " + d2 );
 		Date d3 = new Date( Long.MIN_VALUE );
-		System.out.println( "Min día = " + d3 );
+		System.out.println( "Min día = " + d3 ); // En el año 0 vuelve a "rebotar"
 		// Formatear:
 		SimpleDateFormat f1 = new SimpleDateFormat( "d/M" );
 		System.out.println( "Día de hoy formateado 1: " + f1.format(d1) );

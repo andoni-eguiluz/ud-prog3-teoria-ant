@@ -1,5 +1,8 @@
 package ud.prog3.cap01;
 
+import javax.swing.event.TableModelListener;
+import javax.swing.table.TableModel;
+
 /** Utilidades de Strings de ejemplo
  * Clase preparada para hacer con ella pruebas unitarias con JUnit
  * @author Andoni Eguíluz Morán
@@ -38,6 +41,63 @@ public class EjemploUtilidadesStringParaJUnit {
 		System.out.println( wrapString( prueba, 3 ) );
 		System.out.println( wrapString( prueba, 10 ) );
 		System.out.println( wrapString( quitarTabsYSaltosLinea(prueba), 10 ) );
+		
+		new TableModel() {
+			
+			@Override
+			public void setValueAt(Object aValue, int rowIndex, int columnIndex) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void removeTableModelListener(TableModelListener l) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public boolean isCellEditable(int rowIndex, int columnIndex) {
+				// TODO Auto-generated method stub
+				return false;
+			}
+			
+			@Override
+			public Object getValueAt(int rowIndex, int columnIndex) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public int getRowCount() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+			@Override
+			public String getColumnName(int columnIndex) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public int getColumnCount() {
+				// TODO Auto-generated method stub
+				return 0;
+			}
+			
+			@Override
+			public Class<?> getColumnClass(int columnIndex) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+			
+			@Override
+			public void addTableModelListener(TableModelListener l) {
+				// TODO Auto-generated method stub
+				
+			}
+		};
 	}
 
 }

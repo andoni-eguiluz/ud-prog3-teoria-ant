@@ -4,7 +4,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 /**  Prueba de inserción SQL con caracteres especiales.
- * Siempre es más seguro el preparedstatement y necesita menos proceso
+ *  Siempre es más seguro el preparedstatement y necesita menos proceso
  */
 public class TestCaracteresEscSQL {
 	

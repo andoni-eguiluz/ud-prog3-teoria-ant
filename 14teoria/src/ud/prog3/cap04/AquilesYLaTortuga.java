@@ -32,7 +32,7 @@ public class AquilesYLaTortuga {
 	
 	private static int numLlams = 0;
 	public static void main(String[] args) {
-		double t = 100;
+		double t = 50;
 		System.out.println( "Ejemplo. Tiempo = " + t + " segundos" );
 		System.out.println( " Aquiles está en " + dondeEstaAquiles(t));
 		System.out.println( " La tortuga está en " + dondeEstaLaTortuga(t));

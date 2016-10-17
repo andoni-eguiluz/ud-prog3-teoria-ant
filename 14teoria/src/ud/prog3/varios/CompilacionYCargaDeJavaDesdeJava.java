@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 public class CompilacionYCargaDeJavaDesdeJava {
 	
 	// Configurar esta variable de acuerdo al path de Java de la máquina en particular
-	private static String pathJava = "C:/Program Files/Java/jdk1.8.0_66/bin";
+	private static String pathJava = "C:/Program Files/Java/jdk1.8.0_102/bin";
 	private static String pathSrc = "src";
 	private static String pathBin = "bin";
 	

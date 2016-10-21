@@ -1,7 +1,7 @@
 package ud.prog3.cap03.ejemploPartidas;
 
 import java.sql.*;
-import java.util.*;
+import java.util.*; 
 import java.util.logging.*;
 
 /** Clase de gestión de base de datos del sistema de usuarios - partidas

@@ -43,7 +43,7 @@ public class BDTest {
 	public void initCrearCerrarTest() {
 		Connection con = BD.initBD( "bd-test" );
 		assertNotNull( con );
-		Statement stat =  BD.crearTablaBD( con );
+		Statement stat =  BD.usarCrearTablasBD( con );
 		assertNotNull( stat );
 		BD.cerrarBD( con, stat );
 	}
@@ -51,26 +51,26 @@ public class BDTest {
 	@Test
 	public void reiniciarBDTest() {
 		Connection con = BD.initBD( "bd-test" );
-		Statement stat =  BD.crearTablaBD( con );
+		Statement stat =  BD.usarCrearTablasBD( con );
 		BD.usuarioInsert( stat, u1 );
 		stat =  BD.reiniciarBD( con );
 		ArrayList<Usuario> lUsuarios = BD.usuarioSelect( stat, null );
 		ArrayList<Partida> lPartidas = BD.partidaSelect( stat, null, null, null );
-		assertEquals( lUsuarios.size(), 0 );  // Comprueba el número de datos (vacío)
-		assertEquals( lPartidas.size(), 0 );  // Comprueba el número de datos (vacío)
+		assertEquals( 0, lUsuarios.size() );  // Comprueba el número de datos (vacío)
+		assertEquals( 0, lPartidas.size() );  // Comprueba el número de datos (vacío)
 		BD.cerrarBD( con, stat );
 	}
 
 	@Test
 	public void usuarioInsertTest() {
 		Connection con = BD.initBD( "bd-test" );
-		Statement stat =  BD.crearTablaBD( con );
+		Statement stat =  BD.usarCrearTablasBD( con );
 		ArrayList<Usuario> lUsuarios = BD.usuarioSelect( stat, null );
 		int tamBD = lUsuarios.size();
 		assertTrue( BD.usuarioInsert( stat, u1 ) );
 		assertTrue( BD.usuarioInsert( stat, u2 ) );
 		lUsuarios = BD.usuarioSelect( stat, null );
-		assertEquals( lUsuarios.size(), tamBD+2 );  // Comprueba el número de datos
+		assertEquals( tamBD+2, lUsuarios.size() );  // Comprueba el número de datos
 		BD.cerrarBD( con, stat );
 	}
 
@@ -111,9 +111,9 @@ public class BDTest {
 		u1.setTelefono(7); u1.setApellidos( "cambio" );
 		assertTrue( BD.usuarioUpdate( stat, u1 ) );  // Comprueba que el update es correcto
 		lUsuarios = BD.usuarioSelect( stat, "nick='" + u1.getNick() + "'" );
-		assertEquals( lUsuarios.size(), 1 );  // Comprueba el número de datos
-		assertEquals( lUsuarios.get(0).getTelefono(), u1.getTelefono() );  // Comprueba el cambio de datos
-		assertEquals( lUsuarios.get(0).getApellidos(), "cambio" );  // Comprueba el cambio de datos
+		assertEquals( 1, lUsuarios.size() );  // Comprueba el número de datos
+		assertEquals( u1.getTelefono(), lUsuarios.get(0).getTelefono() );  // Comprueba el cambio de datos
+		assertEquals( "cambio", lUsuarios.get(0).getApellidos() );  // Comprueba el cambio de datos
 		BD.cerrarBD( con, stat );
 	}
 
@@ -126,19 +126,18 @@ public class BDTest {
 		for (Partida p : partidas)
 			assertTrue( BD.partidaInsert( stat, p ) );
 		ArrayList<Partida> lPartidas = BD.partidaSelect( stat, u1, null, null );
-		assertEquals( lPartidas.size(), 3 );  // Comprueba el número de datos: u1 tiene 3 partidas
+		assertEquals( 3, lPartidas.size() );  // Comprueba el número de datos: u1 tiene 3 partidas
 		lPartidas = BD.partidaSelect( stat, u2, null, null );
-		assertEquals( lPartidas.size(), 0 );  // Comprueba el número de datos: u2 tiene 0 partidas
+		assertEquals( 0, lPartidas.size() );  // Comprueba el número de datos: u2 tiene 0 partidas
 		lPartidas = BD.partidaSelect( stat, u3, null, null );
-		assertEquals( lPartidas.size(), 1 );  // Comprueba el número de datos: u3 tiene 1 partida
+		assertEquals( 1, lPartidas.size() );  // Comprueba el número de datos: u3 tiene 1 partida
 		lPartidas = BD.partidaSelect( stat, null, null, lUsuarios );
-		assertEquals( lPartidas.size(), 4 );  // Comprueba el número de datos: hay 4 partidas en total
+		assertEquals( 4, lPartidas.size() );  // Comprueba el número de datos: hay 4 partidas en total
 		lPartidas = BD.partidaSelect( stat, null, "puntuacion>200", lUsuarios );
-		assertEquals( lPartidas.size(), 1 );  // Comprueba el where: hay una partida con más de 200 puntos
+		assertEquals( 1, lPartidas.size() );  // Comprueba el where: hay una partida con más de 200 puntos
 		lPartidas = BD.partidaSelect( stat, u1, "puntuacion>70", lUsuarios );
-		assertEquals( lPartidas.size(), 2 );  // Comprueba el where: hay dos partidas de u1 con más de 70 puntos
+		assertEquals( 2, lPartidas.size() );  // Comprueba el where: hay dos partidas de u1 con más de 70 puntos
 		BD.cerrarBD( con, stat );
 	}
-
 	
 }

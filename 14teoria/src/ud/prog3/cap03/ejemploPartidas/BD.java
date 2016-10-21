@@ -1,19 +1,8 @@
 package ud.prog3.cap03.ejemploPartidas;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.*;
-import java.util.logging.FileHandler;
-import java.util.logging.Handler;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
-import java.util.logging.StreamHandler;
-
-import ud.prog3.cap01.EjemploLogger;
+import java.util.logging.*;
 
 /** Clase de gestión de base de datos del sistema de usuarios - partidas
  * @author andoni.eguiluz @ ingenieria.deusto.es
@@ -40,11 +29,28 @@ public class BD {
 		}
 	}
 	
+	/** Devuelve statement para usar la base de datos
+	 * @param con	Conexión ya creada y abierta a la base de datos
+	 * @return	sentencia de trabajo si se crea correctamente, null si hay cualquier error
+	 */
+	public static Statement usarBD( Connection con ) {
+		try {
+			Statement statement = con.createStatement();
+			statement.setQueryTimeout(30);  // poner timeout 30 msg
+			return statement;
+		} catch (SQLException e) {
+			lastError = e;
+			log( Level.SEVERE, "Error en uso de base de datos", e );
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	/** Crea las tablas de la base de datos. Si ya existen, las deja tal cual
 	 * @param con	Conexión ya creada y abierta a la base de datos
 	 * @return	sentencia de trabajo si se crea correctamente, null si hay cualquier error
 	 */
-	public static Statement crearTablaBD( Connection con ) {
+	public static Statement usarCrearTablasBD( Connection con ) {
 		try {
 			Statement statement = con.createStatement();
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
@@ -80,7 +86,7 @@ public class BD {
 			statement.executeUpdate("drop table if exists usuario");
 			statement.executeUpdate("drop table if exists partida");
 			log( Level.INFO, "Reiniciada base de datos", null );
-			return crearTablaBD( con );
+			return usarCrearTablasBD( con );
 		} catch (SQLException e) {
 			log( Level.SEVERE, "Error en reinicio de base de datos", e );
 			lastError = e;
@@ -127,14 +133,14 @@ public class BD {
 			String listaEms = "";
 			String sep = "";
 			for (String email : u.getListaEmails()) {
-				listaEms = listaEms + sep + email;
+				listaEms = listaEms + sep + secu(email);
 				sep = ",";
 			}
 			sentSQL = "insert into usuario values(" +
-					"'" + u.getNick() + "', " +
-					"'" + u.getPassword() + "', " +
-					"'" + u.getNombre() + "', " +
-					"'" + u.getApellidos() + "', " +
+					"'" + secu(u.getNick()) + "', " +
+					"'" + secu(u.getPassword()) + "', " +
+					"'" + secu(u.getNombre()) + "', " +
+					"'" + secu(u.getApellidos()) + "', " +
 					u.getTelefono() + ", " +
 					u.getFechaUltimoLogin() + ", " +
 					"'" + u.getTipo() + "', " +
@@ -269,7 +275,7 @@ public class BD {
 			return false;
 		}
 	}
-
+	
 	/** Realiza una consulta a la tabla abierta de partidas de la BD, usando la sentencia SELECT de SQL
 	 * @param st	Sentencia ya abierta de Base de Datos (con la estructura de tabla correspondiente a la partida)
 	 * @param u	Usuario del cual se quieren cargar las partidas (si es null no se considera)
@@ -337,6 +343,26 @@ public class BD {
 		}
 	}
 
+	
+	
+	/////////////////////////////////////////////////////////////////////
+	//                      Métodos privados                           //
+	/////////////////////////////////////////////////////////////////////
+
+	// Devuelve el string "securizado" para volcarlo en SQL
+	// (Implementación 1) Sustituye ' por '' y quita saltos de línea
+	// (Implementación 2) Mantiene solo los caracteres seguros en español
+	private static String secu( String string ) {
+		// Implementación (1)
+		// return string.replaceAll( "'",  "''" ).replaceAll( "\\n", "" );
+		// Implementación (2)
+		StringBuffer ret = new StringBuffer();
+		for (char c : string.toCharArray()) {
+			if ("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZñÑáéíóúüÁÉÍÓÚÚ.,:;-_(){}[]-+*=<>'\"¿?¡!&%$@#/\\0123456789".indexOf(c)>=0) ret.append(c);
+		}
+		return ret.toString();
+	}
+	
 
 	/////////////////////////////////////////////////////////////////////
 	//                      Logging                                    //

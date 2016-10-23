@@ -382,7 +382,8 @@ public class BD {
 			logger = Logger.getLogger( BD.class.getName() );  // Nombre del logger - el de la clase
 			logger.setLevel( Level.ALL );  // Loguea todos los niveles
 			try {
-				logger.addHandler( new FileHandler( "bd-" + System.currentTimeMillis() + ".log.xml" ) );  // Y saca el log a fichero xml
+				// logger.addHandler( new FileHandler( "bd-" + System.currentTimeMillis() + ".log.xml" ) );  // Y saca el log a fichero xml
+				logger.addHandler( new FileHandler( "bd.log.xml", true ) );  // Y saca el log a fichero xml
 			} catch (Exception e) {
 				logger.log( Level.SEVERE, "No se pudo crear fichero de log", e );
 			}

@@ -1,5 +1,6 @@
 package ud.prog3.cap05;
 
+import java.util.ArrayList;
 import java.util.function.Consumer;
 
 /** Ejemplo de BST con cualquier Comparable
@@ -9,6 +10,10 @@ import java.util.function.Consumer;
 public class BST<T extends Comparable<T>> {
 	NodoBST<T> raiz;
 	
+	@SuppressWarnings("unchecked")
+	public void insertar( T... nuevos ) {
+		for (T nuevo : nuevos) insertarRec( null, raiz, nuevo );
+	}
 	public void insertar( T nuevo ) {
 		insertarRec( null, raiz, nuevo );
 	}
@@ -98,16 +103,38 @@ public class BST<T extends Comparable<T>> {
 			else
 				return 1 + sizeRec( nodo.izquierdo ) + sizeRec( nodo.derecho );
 		}
+
+		private volatile ArrayList<StringBuffer> lineas;
+	@Override
+	public String toString() {
+		lineas = new ArrayList<>(); lineas.add( new StringBuffer("") );
+		toStringRec( raiz, 0 );
+		String ret = "";
+		for (StringBuffer linea : lineas) if (!linea.toString().isEmpty()) ret += (linea + "\n");
+		return ret;
+	}
+		private void toStringRec( NodoBST<T> nodo, int nivel ) {
+			if (nodo!=null) {   // Si no caso base
+				if (lineas.size() <= nivel+1) lineas.add( new StringBuffer("") ); 
+				toStringRec( nodo.izquierdo, nivel+1 );
+				int largoInferior = lineas.get(nivel+1).length();
+				toStringRec( nodo.derecho, nivel+1 );
+				rellenaEspacios( nivel, largoInferior, lineas.get(nivel+1).length(), nodo.elemento.toString() );
+			}
+		}
+		private void rellenaEspacios( int nivel, int ancho1, int ancho2, String elem ) {
+			int faltanEspacios = (ancho1 + ancho2) / 2;
+			faltanEspacios = faltanEspacios - lineas.get(nivel).length();
+			for (int i=0; i<faltanEspacios-1; i++) lineas.get(nivel).append( " " );
+			lineas.get(nivel).append( elem ); lineas.get(nivel).append( " " );
+		}
 	
 	public static void main(String[] args) {
 		BST<Integer> bst = new BST<>();
-		bst.insertar( 5 );
-		bst.insertar( 3 );
-		bst.insertar( 7 );
-		bst.insertar( 1 );
-		bst.insertar( 9 );
-		bst.insertar( 4 );
-		bst.insertar( 6 );
+		bst.insertar( 5, 3, 7, 1, 9, 4, 6 );
+		System.out.println( "Árbol = " );
+		System.out.print( bst );
+		System.out.println( "Altura árbol: " + bst.altura() );
 		System.out.print( "Recorrido árbol inorden = { ");
 		bst.recorrerInOrden( (Integer i) -> { System.out.print( i + " " ); } );
 		// O en sintaxis Java 7
@@ -117,6 +144,24 @@ public class BST<T extends Comparable<T>> {
 		// 		System.out.print( t + " " );
 		// 	}
 		// });
+		System.out.println( "}");
+		System.out.print( "Recorrido árbol preorden = { ");
+			bst.recorrerPreOrden( (Integer i) -> { System.out.print( i + " " ); } );
+		System.out.println( "}");
+		System.out.print( "Recorrido árbol postorden = { ");
+			bst.recorrerPostOrden( (Integer i) -> { System.out.print( i + " " ); } );
+		System.out.println( "}");
+		System.out.print( "Recorrido árbol anchura = { ");
+			bst.recorrerAnchura( (Integer i) -> { System.out.print( i + " " ); } );
+		System.out.println( "}");
+		System.out.println();
+		System.out.println( "Obsérvese la diferencia con este otro árbol:" );
+		bst = new BST<>();
+		bst.insertar( 1, 3, 4, 5, 6, 7, 9 );
+		System.out.print( bst );
+		System.out.println( "Altura árbol: " + bst.altura() );
+		System.out.print( "Recorrido árbol inorden = { ");
+		bst.recorrerInOrden( (Integer i) -> { System.out.print( i + " " ); } );
 		System.out.println( "}");
 		System.out.print( "Recorrido árbol preorden = { ");
 			bst.recorrerPreOrden( (Integer i) -> { System.out.print( i + " " ); } );

@@ -7,14 +7,14 @@ import java.util.function.Consumer;
  * Facultad de Ingeniería - Universidad de Deusto
  */
 public class BST<T extends Comparable<T>> {
-	NodoBST raiz;
+	NodoBST<T> raiz;
 	
-	public void insertar( Comparable<T> nuevo ) {
+	public void insertar( T nuevo ) {
 		insertarRec( null, raiz, nuevo );
 	}
-		private void insertarRec( NodoBST padre, NodoBST bst, Comparable<T> nuevo ) {
+		private void insertarRec( NodoBST<T> padre, NodoBST<T> bst, T nuevo ) {
 			if (bst==null) {  // Caso base: hay que insertar
-				NodoBST nuevoNodo = new NodoBST( nuevo, null, null );
+				NodoBST<T> nuevoNodo = new NodoBST<T>( nuevo, null, null );
 				if (padre==null) // Insertar en raíz
 					raiz = nuevoNodo;
 				else if (padre.elemento.compareTo(nuevo)<0)
@@ -43,8 +43,8 @@ public class BST<T extends Comparable<T>> {
 			}
 		}
 	
-	public void recorrerPreOrden( BST bst, Consumer<T> c ) {
-		recorrerPOrec( bst.raiz, c );
+	public void recorrerPreOrden( Consumer<T> c ) {
+		recorrerPOrec( raiz, c );
 	}
 		private void recorrerPOrec( NodoBST<T> nodo, Consumer<T> c ) {
 			if (nodo!=null) {   // Si no caso base
@@ -54,8 +54,8 @@ public class BST<T extends Comparable<T>> {
 			}
 		}
 	
-	public void recorrerPostOrden( BST bst, Consumer<T> c ) {
-		recorrerPtOrec( bst.raiz, c );
+	public void recorrerPostOrden( Consumer<T> c ) {
+		recorrerPtOrec( raiz, c );
 	}
 		private void recorrerPtOrec( NodoBST<T> nodo, Consumer<T> c ) {
 			if (nodo!=null) {   // Si no caso base
@@ -65,9 +65,9 @@ public class BST<T extends Comparable<T>> {
 			}
 		}
 	
-	public void recorrerAnchura( BST bst, Consumer<T> c ) {
-		for (int nivel = 0; nivel<bst.altura(bst); nivel++) 
-			recorrerAncrec( bst.raiz, c, nivel );
+	public void recorrerAnchura( Consumer<T> c ) {
+		for (int nivel = 0; nivel<altura(); nivel++) 
+			recorrerAncrec( raiz, c, nivel );
 	}
 		private void recorrerAncrec( NodoBST<T> nodo, Consumer<T> c, int nivel ) {
 			if (nodo!=null && nivel>=0) {   // Si no caso base
@@ -78,10 +78,10 @@ public class BST<T extends Comparable<T>> {
 			}
 		}
 		
-	public int altura( BST bst ) {
-		return alturaRec( bst.raiz );
+	public int altura() {
+		return alturaRec( raiz );
 	}
-		public int alturaRec( NodoBST bst ) {
+		public int alturaRec( NodoBST<T> bst ) {
 			if (bst==null)
 				return 0;
 			else {
@@ -119,22 +119,22 @@ public class BST<T extends Comparable<T>> {
 		// });
 		System.out.println( "}");
 		System.out.print( "Recorrido árbol preorden = { ");
-			bst.recorrerPreOrden( bst, (Integer i) -> { System.out.print( i + " " ); } );
+			bst.recorrerPreOrden( (Integer i) -> { System.out.print( i + " " ); } );
 		System.out.println( "}");
 		System.out.print( "Recorrido árbol postorden = { ");
-			bst.recorrerPostOrden( bst, (Integer i) -> { System.out.print( i + " " ); } );
+			bst.recorrerPostOrden( (Integer i) -> { System.out.print( i + " " ); } );
 		System.out.println( "}");
 		System.out.print( "Recorrido árbol anchura = { ");
-			bst.recorrerAnchura( bst, (Integer i) -> { System.out.print( i + " " ); } );
+			bst.recorrerAnchura( (Integer i) -> { System.out.print( i + " " ); } );
 		System.out.println( "}");
 	}
 }
 
 class NodoBST<T extends Comparable<T>> {
 	T elemento;
-	NodoBST izquierdo;
-	NodoBST derecho;
-	public NodoBST(T elemento, NodoBST izquierdo, NodoBST derecho) {
+	NodoBST<T> izquierdo;
+	NodoBST<T> derecho;
+	public NodoBST(T elemento, NodoBST<T> izquierdo, NodoBST<T> derecho) {
 		this.elemento = elemento;
 		this.izquierdo = izquierdo;
 		this.derecho = derecho;

@@ -5,11 +5,87 @@ import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
 public class PruebasVariasSwing {
+
+		private static Rectangle tamanyoPanel = null;
+		private static HashMap<Object,Rectangle> tamComponentes = new HashMap<>();
+	private static void pruebaReajusteLayoutNulo() {
+		JFrame miJFrame = new JFrame();
+		miJFrame.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+		miJFrame.setTitle ( "Ventana con reajuste por programa de tamaños en layout nulo" );
+		miJFrame.setSize( 640, 480 );
+		JPanel panelPrincipal = new JPanel();
+		panelPrincipal.setLayout( null );
+		// Añadimos un par de componentes de ejemplo para el tema del reajuste
+			JLabelGrafico bicho = new JLabelGrafico( 200, 150, "img/bicho.png" );
+			bicho.setLocation( 200, 100 );
+			panelPrincipal.add( bicho );
+			JLabel texto = new JLabel( "Redimensiona la ventana y observa los cambios" );
+			texto.setBounds( 20, 0, 300, 40 );
+			panelPrincipal.add( texto );
+			JTextField tfEjemplo = new JTextField( "ejemplo JTextField" );
+			tfEjemplo.setBounds( 50, 150, 100, 30 );
+			panelPrincipal.add( tfEjemplo );
+		// Eventos para gestionar el reescalado
+		miJFrame.addWindowListener( new WindowAdapter() {
+			@Override
+			public void windowActivated(WindowEvent e) {  // Al activarse la ventana almacenamos el tamaño del panel
+				tamanyoPanel = panelPrincipal.getBounds();
+				for (Component c : panelPrincipal.getComponents()) {
+					tamComponentes.put( c, c.getBounds() );  // Guardamos el tamaño y posición inicial de cada componente para luego escalarlo con él
+				}
+			}
+		});
+		panelPrincipal.addComponentListener( new ComponentAdapter() {
+			@Override
+			public void componentResized(ComponentEvent e) {  // Al redimensionarse el panel, reajustamos sus componentes
+				double escalaX = panelPrincipal.getWidth() / tamanyoPanel.getWidth();   // Nueva escala X
+				double escalaY = panelPrincipal.getHeight() / tamanyoPanel.getHeight(); // Nueva escala Y
+				for (Component c : panelPrincipal.getComponents()) {
+					Rectangle tamanyoInicial = tamComponentes.get( c );
+					if (c!=null) {
+						c.setSize( new Dimension( (int) (tamanyoInicial.getWidth()*escalaX), (int)(tamanyoInicial.getHeight()*escalaY) ) );
+						c.setLocation( (int) (tamanyoInicial.getX()*escalaX), (int)(tamanyoInicial.getY()*escalaY) );
+					}
+				}
+			}
+		});
+		miJFrame.getContentPane().add( panelPrincipal, BorderLayout.CENTER );  // El panel ocupa siempre toda la ventana y se reescala con ella
+		miJFrame.setVisible( true );
+	}
+	
+		@SuppressWarnings("serial")
+		private static class JLabelGrafico extends JLabel {
+			/** Construye y devuelve el JLabel del gráfico con el tamaño y nombre de fichero dado
+			 * @param ancho	Ancho en pixels
+			 * @param alto	Alto en pixels
+			 * @param ficGrafico	Nombre de recurso partiendo de esta clase
+			 */
+			public JLabelGrafico( int ancho, int alto, String ficGrafico ) {
+				try {
+					setIcon( new ImageIcon( JLabelGrafico.class.getResource( ficGrafico) ) );
+				} catch (Exception e) {
+					System.err.println( "Error en carga de recurso: " + ficGrafico + " no encontrado" ); e.printStackTrace();
+				}
+				setBounds( 0, 0, ancho, alto );
+			}
+			// Redefinición del paintComponent para que se escale y se rote el gráfico
+			@Override
+			protected void paintComponent(Graphics g) {
+				Graphics2D g2 = (Graphics2D) g;  // El Graphics realmente es Graphics2D
+				Image img = ((ImageIcon)getIcon()).getImage();
+				// Escalado más fino con estos 3 parámetros:
+				g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+				g2.setRenderingHint(RenderingHints.KEY_RENDERING,RenderingHints.VALUE_RENDER_QUALITY);
+				g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);	
+		        g2.drawImage( img, 0, 0, getWidth(), getHeight(), null );  // Dibujado de la imagen
+			}
+		}
 
 	private static void pruebaDecoraciones() {
 		JFrame miJFrame = new JFrame();
@@ -201,7 +277,9 @@ public class PruebasVariasSwing {
 	}
 	
 	public static void main( String[] s ) {
-		// TODO: Descomentar la prueba a realizar
+		// TODO: Comentar/descomentar la prueba a realizar
+			// Prueba de reajuste programático de layout nulo en cambios de escala
+		pruebaReajusteLayoutNulo();
 			// Decoración JFrame y JInternalFrame
 		pruebaDecoraciones();
 			// Fondo de pantalla con un gráfico

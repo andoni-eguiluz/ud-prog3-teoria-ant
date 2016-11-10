@@ -22,7 +22,7 @@ public class PruebasListas {
 //		visuMem( "Tras inicialización integer", true );
 //		System.out.println( iii );
 		if (numPrueba==1 || numPrueba==3) {
-			ArrayList<Object> l = new ArrayList<Object>(16);
+			ArrayList<Object> l = new ArrayList<Object>();
 			visuMem( "Tras crear ArrayList (tam = " + l.size() + ", cap = " + UtilidadArrayList.getArrayListCapacity(l) + ")", true, true );
 			int num = 75;
 			for (int i=0; i<num; i++) {
@@ -168,6 +168,7 @@ public class PruebasListas {
 		pruebaEspacioListas( numPrueba );
 		System.out.println();
 		pruebaEspacioListas( numPrueba );
+		System.out.println();
 		System.out.println( "Test 2 - VER ESTE:");
 		pruebaEspacioListas( numPrueba );
 		pruebaTiempoListas( numPrueba );

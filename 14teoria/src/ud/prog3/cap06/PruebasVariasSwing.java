@@ -12,6 +12,29 @@ import javax.swing.*;
 
 public class PruebasVariasSwing {
 
+		private static JEditorPane ep;
+		private static String textoHtml;
+	private static void pruebaTextoEnriquecidoConImagenes() {
+		JFrame v= new JFrame("HelloWorldSwing");
+		v.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		// String imgsrc = PruebasVariasSwing.class.getClassLoader().getSystemResource("img/bicho.png").toString();
+		String imgsrc = PruebasVariasSwing.class.getResource("img/bicho.png").toString();
+		// String imgsrc = "img/bicho.png";
+		textoHtml = "<html>Hola imagen <img src='" + imgsrc + "' width=100 height=100></img> bienvenida!";
+		ep = new JEditorPane("text/html", textoHtml + "<html>" );
+		ep.setPreferredSize( new Dimension( 800, 600 ) );
+		v.getContentPane().add( new JScrollPane(ep), BorderLayout.CENTER );
+		JButton b = new JButton( "Pulsa para añadir imagen" );
+		v.getContentPane().add( b, BorderLayout.SOUTH );
+		b.addActionListener( (e) -> {
+			String img = PruebasVariasSwing.class.getResource("img/bicho.png").toString();
+			textoHtml = textoHtml + "<br/><img src='" + img + "' width=200 height=200></img> y tú también!";
+			ep.setText( textoHtml + "</html>" );
+		});
+		v.pack();
+		v.setVisible(true);
+	}
+	
 		private static Rectangle tamanyoPanel = null;
 		private static HashMap<Object,Rectangle> tamComponentes = new HashMap<>();
 	private static void pruebaReajusteLayoutNulo() {
@@ -277,21 +300,38 @@ public class PruebasVariasSwing {
 	}
 	
 	public static void main( String[] s ) {
-		// TODO: Comentar/descomentar la prueba a realizar
+		JFrame vP = new JFrame();
+		vP.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
+		JPanel p = new JPanel();
+		p.setLayout( new GridLayout(10,1) );
+		vP.getContentPane().add( p, BorderLayout.CENTER );
+		JButton b;
+		p.add( b = new JButton( "texto con imagen") );
+			// Prueba de texto enriquecido con imágenes
+			b.addActionListener( (e) -> { pruebaTextoEnriquecidoConImagenes(); } ); 
+		p.add( b = new JButton( "Reajuste tamaño con layout nulo con eventos") );
 			// Prueba de reajuste programático de layout nulo en cambios de escala
-		pruebaReajusteLayoutNulo();
+			b.addActionListener( (e) -> { pruebaReajusteLayoutNulo(); } );
+		p.add( b = new JButton( "Decoración JFrame y JInternalFrame") );
 			// Decoración JFrame y JInternalFrame
-		pruebaDecoraciones();
+			b.addActionListener( (e) -> { pruebaDecoraciones(); } );
+		p.add( b = new JButton( "Fondo de pantalla con gráfico") );
 			// Fondo de pantalla con un gráfico
-		pruebaVentanaConGraficoDeFondo();  // ver clase JPanelConFondo
+			b.addActionListener( (e) -> { pruebaVentanaConGraficoDeFondo(); } );  // ver clase JPanelConFondo
+		p.add( b = new JButton( "Centrado vertical con GridLayout y con GridBagLayout") );
 			// Centrado vertical con GridLayout y con GridBagLayout
-		pruebaCentradoVertical();
+			b.addActionListener( (e) -> { pruebaCentradoVertical(); } );
+		p.add( b = new JButton( "tiempo que tarda una ventana con font") );
 			// Prueba de tiempo que tarda una ventana y tiempo que tarda Font
-		pruebaTiempoDeFont();
+			b.addActionListener( (e) -> { pruebaTiempoDeFont(); } );
+		p.add( b = new JButton( "consultor de contenedor principal") );
 			// Prueba de consultor de contenedor principal
-		pruebaConsultorContenedorPrincipal();
+			b.addActionListener( (e) -> { pruebaConsultorContenedorPrincipal(); } );
+		p.add( b = new JButton( "textfield con entrada limitada") );
 			// Prueba de text field con entrada limitada
-		pruebaLimitarJTextField();
+			b.addActionListener( (e) -> { pruebaLimitarJTextField(); } );
+		vP.pack();
+		vP.setVisible( true );
 	}
 }
 

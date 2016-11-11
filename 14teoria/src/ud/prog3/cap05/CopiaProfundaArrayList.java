@@ -65,9 +65,19 @@ public class CopiaProfundaArrayList {
 		System.out.println( "Pero... ¿no habíamos hecho un clone()?" );
 		
 		// Solución 1: Copia profunda
-		// Solución 2: Hacer el cambio en la ordenación (on-the-fly) sin que afecte a los datos
+		//    Implementada en el método cloneProfundo
+		
+		// Solución 2: Hacer el cambio en la ordenación -sustitución de strings- sobre la marcha,
+		// sin que afecte a los datos
 		//    (coste computacional: hay que hacerlo 'n*logn' veces * m ordenaciones)
+		//    Impleméntala para ver cómo funcionaría
+		
 		// Solución 3: Duplicar los atributos que requieran ordenación
+		//    P ej un atributo adicional para nombre y apellidos que siempre tenga mayúsculas y con tildes eliminadas
+		//    (fácil de hacer con métodos set* --- cada set* se encarga de actualizar el campo asociado)
+		//    (coste computacional: duplicamos el espacio necesitado por esos atributos)
+		//    Impleméntala para ver cómo funcionaría
+		
 	}
 
 }

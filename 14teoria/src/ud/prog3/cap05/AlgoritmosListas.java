@@ -105,6 +105,16 @@ public class AlgoritmosListas {
 		}
 	}
 
+	/** Método de añadido en una lista que la mantiene siempre ordenada
+	 * Pre: La lista l está ya ordenada antes de la ejecución de este método
+	 * Post: l sigue ordenada
+	 * @param l	Lista en la que insertar el nuevo valor
+	 * @param valor	Elemento nuevo a insertar en la lista
+	 */
+	static void addEnOrden( List<?> l, Comparable<?> valor ) {
+		addEnOrden( l, valor, 0, l.size()-1 );
+	}
+	
 	// Pre: desde>=0  +  desde<=l.size()  +  hasta<l.size()
 	// Pre: l está ordenada
 	static void addEnOrden( List l, Comparable valor, int desde, int hasta ) {
@@ -158,8 +168,8 @@ public class AlgoritmosListas {
 		aBuscar = 30;
 		System.out.println( "Dónde está el " + aBuscar + "? " +
 				busquedaBinariaIt( l, new Integer(aBuscar) ) );
-		int aInsertar = new Integer(17);
-		addEnOrden( l, aInsertar, 0, l.size()-1 );
+		Integer aInsertar = new Integer(17);
+		addEnOrden( l, aInsertar );
 		System.out.println( "Tras insertar " + aInsertar + ": " + l );
 	}
 }

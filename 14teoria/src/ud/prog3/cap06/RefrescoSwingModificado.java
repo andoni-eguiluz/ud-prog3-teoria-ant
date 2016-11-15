@@ -130,7 +130,7 @@ public class RefrescoSwingModificado {
     // Lo debe llamar el hilo de dibujado (bucle de juego o animación, por ejemplo)
     private void esperaAlDibujado() {
         try {
-            synchronized (bloqueoDibujo) { bloqueoDibujo.wait(); }
+            synchronized (bloqueoDibujo) { bloqueoDibujo.wait(100); }
         } catch (InterruptedException e) {}
     }
 

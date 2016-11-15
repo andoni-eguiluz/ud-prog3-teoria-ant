@@ -31,7 +31,7 @@ public class EjemploPanelesSwing {
     
     private static void crearYMostrarGUI() {
     	// Crear ventana inicial
-        miVentana = new JFrame("Prueba de paneles de Swing");        
+        miVentana = new JFrame("Prueba de paneles de Swing con LayeredPane");        
         // Acabar de crear y hacer visible ventana
         miVentana.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE); 
         

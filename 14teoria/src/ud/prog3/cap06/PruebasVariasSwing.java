@@ -10,6 +10,9 @@ import java.util.HashMap;
 import javax.imageio.ImageIO;
 import javax.swing.*;
 
+/** Pruebas varias de aspectos puntuales de Swing
+ * @author andoni.eguiluz @ ingenieria.deusto.es
+ */
 public class PruebasVariasSwing {
 
 		private static JEditorPane ep;
@@ -67,13 +70,15 @@ public class PruebasVariasSwing {
 		panelPrincipal.addComponentListener( new ComponentAdapter() {
 			@Override
 			public void componentResized(ComponentEvent e) {  // Al redimensionarse el panel, reajustamos sus componentes
-				double escalaX = panelPrincipal.getWidth() / tamanyoPanel.getWidth();   // Nueva escala X
-				double escalaY = panelPrincipal.getHeight() / tamanyoPanel.getHeight(); // Nueva escala Y
-				for (Component c : panelPrincipal.getComponents()) {
-					Rectangle tamanyoInicial = tamComponentes.get( c );
-					if (c!=null) {
-						c.setSize( new Dimension( (int) (tamanyoInicial.getWidth()*escalaX), (int)(tamanyoInicial.getHeight()*escalaY) ) );
-						c.setLocation( (int) (tamanyoInicial.getX()*escalaX), (int)(tamanyoInicial.getY()*escalaY) );
+				if (panelPrincipal!=null && tamanyoPanel!=null) {
+					double escalaX = panelPrincipal.getWidth() / tamanyoPanel.getWidth();   // Nueva escala X
+					double escalaY = panelPrincipal.getHeight() / tamanyoPanel.getHeight(); // Nueva escala Y
+					for (Component c : panelPrincipal.getComponents()) {
+						Rectangle tamanyoInicial = tamComponentes.get( c );
+						if (c!=null) {
+							c.setSize( new Dimension( (int) (tamanyoInicial.getWidth()*escalaX), (int)(tamanyoInicial.getHeight()*escalaY) ) );
+							c.setLocation( (int) (tamanyoInicial.getX()*escalaX), (int)(tamanyoInicial.getY()*escalaY) );
+						}
 					}
 				}
 			}

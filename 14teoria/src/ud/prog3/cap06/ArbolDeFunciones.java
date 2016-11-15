@@ -9,6 +9,10 @@ import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 import javax.swing.tree.TreePath;
 
+/** Clase que permite construir árboles generales representados automáticamente en una ventana
+ * implementados con un JTree.
+ * @author andoni.eguiluz @ ingenieria.deusto.es
+ */
 public class ArbolDeFunciones {
 
 	private class Ventana extends JFrame {
@@ -134,8 +138,11 @@ public class ArbolDeFunciones {
 
 }
 
+/** Clase de utilidad que expone de forma pública el método #setES
+ * (equivalente al #setExpandedState, que es protegido en JTree)
+ * @author andoni.eguiluz @ ingenieria.deusto.es
+ */
 class JTree2 extends JTree {
-
 	@Override
 	protected void setExpandedState(TreePath path, boolean state) {
 		super.setExpandedState(path, state);
@@ -144,5 +151,4 @@ class JTree2 extends JTree {
 	public void setES(TreePath path, boolean state) {
 		setExpandedState(path, state);
 	}
-	
 }

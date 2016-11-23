@@ -1,7 +1,9 @@
 package ud.prog3.cap06;
 
+import java.awt.BorderLayout;
 import java.util.ArrayList;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -10,18 +12,29 @@ import javax.swing.table.TableModel;
 
 public class SimpleTableModel implements TableModel {
 	Object datosEjemplo[][] = 
-		{ { "Andoni", "Eguíluz", 14, "diciembre", 1968 },
+		{ { "Andoni", "García", 14, "diciembre", 1968 },
 		  { "Jennifer", "Lawrence",  15, "agosto", 1990 },
 		  { "Leonardo", "di Caprio", 11, "noviembre", 1974 }
 		};
 	String columnas[] = { "Nombre", "Apellido", "dia", "mes", "año" };
+	
+	private static JTable tPrueba;
+	private static SimpleTableModel modelo;
+	
 	public static void main(String[] args) {
 		JFrame v = new JFrame();
 		v.setDefaultCloseOperation( JFrame.DISPOSE_ON_CLOSE );
-		JTable tPrueba = new JTable( 5, 2 );
-		SimpleTableModel modelo = new SimpleTableModel();
+		tPrueba = new JTable( 5, 2 );
+		modelo = new SimpleTableModel();
 		tPrueba.setModel( modelo );
-		v.getContentPane().add( new JScrollPane( tPrueba ) );
+		JButton b = new JButton( "Test" );
+		b.addActionListener( (e) -> {
+			modelo.datosEjemplo[0][1] = "Eguíluz";
+			// El cambio programático no se detecta solo (hay independencia de la vista y el modelo)
+			// tPrueba.tableChanged( new TableModelEvent( modelo, 0, 0, 1, 1));
+		});
+		v.getContentPane().add( new JScrollPane( tPrueba ), BorderLayout.CENTER );
+		v.getContentPane().add( b, BorderLayout.SOUTH );
 		v.setSize( 600, 250 );
 		v.setVisible( true );
 	}

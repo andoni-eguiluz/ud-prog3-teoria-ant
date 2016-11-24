@@ -4,6 +4,10 @@ import java.sql.*;
 import java.util.*; 
 import java.util.logging.*;
 
+//Documentación particular de foreign keys en sqlite en
+//https://www.sqlite.org/foreignkeys.html
+//Si se quiere hacer sin foreign keys, quitar las líneas marcadas con (1) y sustituirlas por las (2) en BD.java
+
 /** Clase de gestión de base de datos del sistema de usuarios - partidas
  * @author andoni.eguiluz @ ingenieria.deusto.es
  */
@@ -19,6 +23,9 @@ public class BD {
 		try {
 		    Class.forName("org.sqlite.JDBC");
 		    Connection con = DriverManager.getConnection("jdbc:sqlite:" + nombreBD );
+		    Statement st = con.createStatement();      // (1) Solo para foreign keys
+		    st.execute( "PRAGMA foreign_keys = ON" );  // (1)
+		    st.close();                                // (1)
 			log( Level.INFO, "Conectada base de datos " + nombreBD, null );
 		    return con;
 		} catch (ClassNotFoundException | SQLException e) {
@@ -56,13 +63,16 @@ public class BD {
 			statement.setQueryTimeout(30);  // poner timeout 30 msg
 			try {
 				statement.executeUpdate("create table usuario " +
-					"(nick string, password string, nombre string, apellidos string" +
+					// "(nick string "  // (2) Esto sería sin borrado en cascada ni relación de claves ajenas
+					"(nick string PRIMARY KEY" // (1) Solo para foreign keys
+					+ ", password string, nombre string, apellidos string" +
 					", telefono integer, fechaultimologin bigint, tipo string" +
 					", emails string)");
 			} catch (SQLException e) {} // Tabla ya existe. Nada que hacer
 			try {
 				statement.executeUpdate("create table partida " +
-					"(usuario_nick string, fechapartida bigint, puntuacion integer)");
+					"(usuario_nick string REFERENCES usuario(nick) ON DELETE CASCADE, fechapartida bigint, puntuacion integer)"); // (1) Solo para foreign keys
+					// "(usuario_nick string, fechapartida bigint, puntuacion integer)"); // (2) Esto sería sin borrado en cascada
 			} catch (SQLException e) {} // Tabla ya existe. Nada que hacer
 			log( Level.INFO, "Creada base de datos", null );
 			return statement;
@@ -248,6 +258,26 @@ public class BD {
 		}
 	}
 
+	/** Borrar un usuario de la tabla abierta de BD, usando la sentencia DELETE de SQL
+	 * @param st	Sentencia ya abierta de Base de Datos (con la estructura de tabla correspondiente al usuario)
+	 * @param u	Usuario a borrar de la base de datos  (se toma su nick para el borrado)
+	 * @return	true si el borrado es correcto, false en caso contrario
+	 */
+	public static boolean usuarioDelete( Statement st, Usuario u ) {
+		String sentSQL = "";
+		try {
+			sentSQL = "delete from usuario where nick='" + secu(u.getNick()) + "'";
+			int val = st.executeUpdate( sentSQL );
+			log( Level.INFO, "BD borrada " + val + " fila\t" + sentSQL, null );
+			return (val==1);
+		} catch (SQLException e) {
+			log( Level.SEVERE, "Error en BD\t" + sentSQL, e );
+			lastError = e;
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 	/////////////////////////////////////////////////////////////////////
 	//                      Operaciones de partida                     //
 	/////////////////////////////////////////////////////////////////////
@@ -343,6 +373,27 @@ public class BD {
 		}
 	}
 
+	/** Borra una partida de la tabla abierta de BD, usando la sentencia DELETE de SQL
+	 * @param st	Sentencia ya abierta de Base de Datos (con la estructura de tabla correspondiente a la partida)
+	 * @param p	Partida a borrar en la base de datos
+	 * @return	true si se borra una fila correctamente, false en caso contrario
+	 */
+	public static boolean partidaDelete( Statement st, Partida p ) {
+		String sentSQL = "";
+		try {
+			sentSQL = "delete from partida where usuario_nick=" +
+					"'" + p.getUsuario().getNick() + "' AND " +
+					"fechapartida=" + p.getFechaPartida();
+			int val = st.executeUpdate( sentSQL );
+			log( Level.INFO, "BD borrada " + val + " fila\t" + sentSQL, null );
+			return (val==1);  // Se tiene que borrar 1 - error si no
+		} catch (SQLException e) {
+			log( Level.SEVERE, "Error en BD (delete partida)\t" + sentSQL, e );
+			lastError = e;
+			e.printStackTrace();
+			return false;
+		}
+	}
 	
 	
 	/////////////////////////////////////////////////////////////////////

@@ -13,6 +13,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+// Documentación particular de foreign keys en sqlite en
+// https://www.sqlite.org/foreignkeys.html
+// Si se quiere hacer sin foreign keys, quitar las líneas marcadas con (1) y sustituirlas por las (2) en BD.java
+
 public class BDTest {
 
 	private Usuario u1, u2, u3;      // Usuarios de prueba
@@ -64,7 +68,8 @@ public class BDTest {
 	@Test
 	public void usuarioInsertTest() {
 		Connection con = BD.initBD( "bd-test" );
-		Statement stat =  BD.usarCrearTablasBD( con );
+		// Statement stat =  BD.usarCrearTablasBD( con );
+		Statement stat =  BD.reiniciarBD( con );
 		ArrayList<Usuario> lUsuarios = BD.usuarioSelect( stat, null );
 		int tamBD = lUsuarios.size();
 		assertTrue( BD.usuarioInsert( stat, u1 ) );
@@ -139,5 +144,27 @@ public class BDTest {
 		assertEquals( 2, lPartidas.size() );  // Comprueba el where: hay dos partidas de u1 con más de 70 puntos
 		BD.cerrarBD( con, stat );
 	}
+
+	// prueba del on delete cascade del usuario
+	// (solo con las foreign keys activadas)
+	// Ver https://www.sqlite.org/foreignkeys.html
+	@Test
+	public void usuarioDeleteCascadeTest() {
+		Connection con = BD.initBD( "bd-test2" );
+		Statement stat =  BD.reiniciarBD( con );
+		for (Usuario u : usuarios) BD.usuarioInsert( stat, u );
+		for (Partida p : partidas) BD.partidaInsert( stat, p );
+		long fechaHoy = System.currentTimeMillis();
+		Partida pErronea = new Partida( new Usuario( "nickfalso", "", "", "", 4, TipoUsuario.Invitado, new ArrayList<>() ), fechaHoy, 100 );
+		assertFalse( BD.partidaInsert( stat, pErronea ) );  // Comprueba que una partida sin usuario no se puede insertar
+		BD.usuarioDelete( stat, u1 );
+		ArrayList<Usuario> lUsuario = BD.usuarioSelect( stat, "nick = '" + u1.getNick() + "'" );
+		assertTrue( lUsuario.size() == 0 );  // Comprueba que al borrar el usuario se borra correctamente ese usuario...
+		ArrayList<Partida> lPartidas = BD.partidaSelect( stat, u1, null, null );
+		assertEquals( 0, lPartidas.size() );  // ... y que se han borrado en cascada sus partidas
+		BD.cerrarBD( con, stat );
+	}
+	
+	
 	
 }
